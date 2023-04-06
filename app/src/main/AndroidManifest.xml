@@ -23,7 +23,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".projetmobile.HomeUI"
+            android:name=".projetmobile.MyAppHome"
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.MyApplication">
