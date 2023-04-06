@@ -26,6 +26,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.max
+import com.example.myapplication.projetmobile.Drawer
 import com.example.myapplication.ui.theme.MyApplicationTheme
 
 class MyAppHome: ComponentActivity() {
@@ -44,30 +45,8 @@ class MyAppHome: ComponentActivity() {
     }
 }
 
-
-
 @Composable
-fun Navigation() {
-        TopAppBar(
-            navigationIcon = {
-                Icon(
-                    imageVector = Icons.Default.Menu,
-                    contentDescription ="Menu"
-                )
-            },
-            title = {
-                Text(
-                    text = "TeamFlow",
-                    color= Color.White,
-                    modifier = Modifier.padding(horizontal = 50.dp)
-                )
-            },
-            backgroundColor= Color(color = 0xFF1E88E5)
-        )
-}
-@Preview
-@Composable
-fun container() {
+private fun container() {
     Column(modifier = Modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
@@ -103,23 +82,7 @@ fun container() {
 
 
 
-@Composable
-fun bottom_bar() {
-    BottomAppBar(
-        backgroundColor= Color(color = 0xFF1E88E5),
-        cutoutShape = MaterialTheme.shapes.small.copy(
-            CornerSize(percent = 50)
-        )
-    ) {
 
-        Text(
-            text = "Add",
-            color = Color.White,
-            textAlign = TextAlign.Center
-        )
-
-    }
-}
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun ScaffoldExamples() {
@@ -141,13 +104,13 @@ fun ScaffoldExamples() {
             Box(modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 8.dp)){
-                TopBarMenu()
+                Navigation().barNavigation()
             }
         },
 
         // pass the bottomBar
         // we created
-        bottomBar = { BottomBar() },
+        bottomBar = { Menu().bottom_bar() },
 
         // Pass the body in
         // content parameter
