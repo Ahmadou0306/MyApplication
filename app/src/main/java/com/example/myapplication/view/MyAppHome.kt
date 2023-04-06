@@ -1,15 +1,14 @@
-package com.example.myapplication.projetmobile
+package com.example.myapplication.view
 
-import android.R
 import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.magnifier
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -23,10 +22,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.max
+import androidx.compose.ui.unit.sp
+import com.example.myapplication.projetmobile.Drawer
 import com.example.myapplication.ui.theme.MyApplicationTheme
+import com.example.myapplication.view.layout.Navigation
 
 class MyAppHome: ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,58 +38,48 @@ class MyAppHome: ComponentActivity() {
                 Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colors.background) {
                     ScaffoldExamples()
 
+
                 }
-                
             }
         }
     }
 }
 
 
-
 @Composable
-fun Navigation() {
-        TopAppBar(
-            navigationIcon = {
-                Icon(
-                    imageVector = Icons.Default.Menu,
-                    contentDescription ="Menu"
-                )
-            },
-            title = {
-                Text(
-                    text = "TeamFlow",
-                    color= Color.White,
-                    modifier = Modifier.padding(horizontal = 50.dp)
-                )
-            },
-            backgroundColor= Color(color = 0xFF1E88E5)
-        )
-}
-@Preview
-@Composable
-fun container() {
-    Column(modifier = Modifier.fillMaxWidth(),
+private fun container() {
+    Column(modifier = Modifier
+        .fillMaxWidth()
+        .padding(bottom = 20.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
 
     ) {
         LazyColumn(){
             var i:Int = 0
+            //utiliser une liste pour les items
             items(1){
                 while(i<20){
                     Box(modifier = Modifier
                         .width(250.dp)
-                        .padding(vertical = 3.dp)
-                        .border(2.dp, Color.Black)
-                        .background(color = Color.LightGray)
-                        .clip(shape = RoundedCornerShape(12.dp))
-                        .padding(vertical = 16.dp),
-
+                        .clickable(
+                            enabled = true,
+                            onClick = { println("$i++") },
+                        )
+                        .padding(vertical = 23.dp)
+                        .clip(shape = RoundedCornerShape(30.dp))
+                        .border(3.dp, Color.Blue)
+                        .background(Color(color = 0xFF1E88E5))
+                        .padding(50.dp),
                         Alignment.Center,
 
                         ) {
-                        Text(text = "Projet $i", style = TextStyle(fontWeight = FontWeight.Bold))
+                        Text(text = "Projet $i",color = Color.White, style = TextStyle(
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 30.sp,
+                            textDecoration = TextDecoration.Underline
+                        ),
+                        )
                     }
                     i++
                 }
@@ -103,23 +94,7 @@ fun container() {
 
 
 
-@Composable
-fun bottom_bar() {
-    BottomAppBar(
-        backgroundColor= Color(color = 0xFF1E88E5),
-        cutoutShape = MaterialTheme.shapes.small.copy(
-            CornerSize(percent = 50)
-        )
-    ) {
 
-        Text(
-            text = "Add",
-            color = Color.White,
-            textAlign = TextAlign.Center
-        )
-
-    }
-}
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun ScaffoldExamples() {
@@ -138,20 +113,21 @@ fun ScaffoldExamples() {
 
         // pass the topbar we created
         topBar = {
-            Box(modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 8.dp)){
-                TopBarMenu()
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 8.dp, vertical = 8.dp)
+
+            ) {
+             Navigation().barNavigation()
             }
         },
 
-        // pass the bottomBar
-        // we created
-        bottomBar = { BottomBar() },
 
         // Pass the body in
         // content parameter
-        content = { container() },
+        content = {container() },
+
 
         // pass the drawer
         drawerContent = {
@@ -169,4 +145,15 @@ fun ScaffoldExamples() {
                 // Simple Text inside FAB
                 Text(text = "X")
             }
-        })}
+        },
+
+        // pass the bottomBar
+        // we created
+        bottomBar = { Navigation().barNavigation()}
+
+    )
+}
+
+
+
+
