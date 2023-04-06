@@ -1,4 +1,4 @@
-package com.example.myapplication.projetmobile
+package com.example.myapplication.view.layout
 
 import android.R
 import android.annotation.SuppressLint
