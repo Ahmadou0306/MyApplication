@@ -13,7 +13,6 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 
 class Navigation: ViewModel()  {
-
     @Composable
     fun barNavigation(){
         TopAppBar(
