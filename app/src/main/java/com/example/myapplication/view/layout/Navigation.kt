@@ -1,5 +1,6 @@
 package com.example.myapplication.view.layout
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
@@ -20,7 +21,9 @@ class Navigation: ViewModel()  {
                 Icon(
                     imageVector = Icons.Default.Menu,
                     contentDescription ="Menu",
-                    tint = Color.White
+                    tint = Color.White,
+                    modifier = Modifier.clickable {   }
+
                 )
             },
             title = {

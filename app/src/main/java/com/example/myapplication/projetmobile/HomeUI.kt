@@ -17,6 +17,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.myapplication.ui.theme.MyApplicationTheme
+import com.example.myapplication.view.layout.Drawer
 
 class HomeUI :ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -69,23 +70,6 @@ fun BottomBar(){
 
 
 @Composable
-fun Drawer() {
-    // Column Composable
-    Column(
-        Modifier
-            .background(Color.White)
-            .fillMaxSize()
-    ) {
-        // Repeat is a loop which
-        // takes count as argument
-        repeat(5) { item ->
-            Text(text = "Item number $item", modifier = Modifier.padding(8.dp), color = Color.Black)
-        }
-    }
-}
-
-
-@Composable
 fun Body() {
     Column(
         verticalArrangement = Arrangement.Center,
@@ -130,7 +114,7 @@ fun ScaffoldExample() {
 
         // pass the drawer
         drawerContent = {
-            Drawer()
+            Drawer().drawerView()
         },
     isFloatingActionButtonDocked = true,
         floatingActionButton = {

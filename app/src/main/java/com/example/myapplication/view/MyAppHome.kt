@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.material.icons.filled.Menu
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -22,8 +21,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.myapplication.projetmobile.Drawer
 import com.example.myapplication.ui.theme.MyApplicationTheme
+import com.example.myapplication.view.layout.Drawer
 import com.example.myapplication.view.layout.Menu
 import com.example.myapplication.view.layout.Navigation
 
@@ -109,7 +108,6 @@ fun ScaffoldExamples() {
     Scaffold(
         // pass the scaffold state
         scaffoldState = scaffoldState,
-
         // pass the topbar we created
         topBar = {
             Box(modifier = Modifier
@@ -118,16 +116,12 @@ fun ScaffoldExamples() {
                 Navigation().barNavigation()
             }
         },
-
-
         // Pass the body in
         // content parameter
         content = {container() },
-
-
         // pass the drawer
         drawerContent = {
-            Drawer()
+            Drawer().drawerView()
         },
         isFloatingActionButtonDocked = true,
         floatingActionButton = {
@@ -145,7 +139,7 @@ fun ScaffoldExamples() {
 
         // pass the bottomBar
         // we created
-        bottomBar = { Navigation().barNavigation()}
+        bottomBar = { Menu().bottom_bar()}
 
     )
 }
