@@ -27,6 +27,7 @@ import androidx.lifecycle.ViewModel
 import com.example.myapplication.R
 
 class Drawer:ViewModel() {
+    private val colorPersonnel =0xFF1E88E5
 
     @SuppressLint("SuspiciousIndentation")
     @Composable
