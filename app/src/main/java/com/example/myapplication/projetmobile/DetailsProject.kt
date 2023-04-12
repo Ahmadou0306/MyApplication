@@ -1,14 +1,15 @@
+@file:Suppress("UNREACHABLE_CODE")
+
 package com.example.myapplication.projetmobile
+import android.content.Context
 import android.graphics.Paint
 import android.graphics.Typeface
-import android.icu.util.Calendar
 import android.os.Bundle
-import android.widget.CalendarView
+
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -18,6 +19,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.Composable
+
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -33,22 +35,31 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.viewinterop.AndroidView
+
 import androidx.navigation.NavController
-import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.myapplication.projetmobile.dataSource.AppDatabase
+import com.example.myapplication.projetmobile.dataSource.Task
 import com.example.myapplication.ui.theme.MyApplicationTheme
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+
+import java.util.*
 
 
 class DetailsProject :ComponentActivity(){
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             MyApplicationTheme {
                 // A surface container using the 'background' color from the theme
                 Surface( color = MaterialTheme.colors.background) {
+                    MyApp(this)
                 }
             }
         }
@@ -56,17 +67,130 @@ class DetailsProject :ComponentActivity(){
 }
 
 @Composable
-fun Add(){
-    Text(text = "Mansour")
+fun InfoProject(navController: NavController){
+}
+@Composable
+fun AddTasks(navController: NavController) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp)
+    ) {
+        OutlinedTextField(
+            value = "",
+            onValueChange = { },
+            label = { Text("Task Name") },
+            modifier = Modifier.fillMaxWidth()
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+        OutlinedTextField(
+            value = "",
+            onValueChange = { },
+            label = { Text("Task Description") },
+            modifier = Modifier.fillMaxWidth()
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+        OutlinedTextField(
+            value = "taskDueDate",
+            onValueChange = { },
+            label = { Text("Task Due Date") },
+            modifier = Modifier.fillMaxWidth()
+        )
+        Spacer(modifier = Modifier.height(32.dp))
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Button(
+                onClick = {},
+                modifier = Modifier.width(178.dp)
+            ) {
+                Text("Add Task")
+            }
+            Spacer(modifier = Modifier.width(16.dp))
+            Button(
+                onClick = { navController.popBackStack() },
+                modifier = Modifier.width(200.dp)
+            ) {
+                Text("Retour")
+            }
+        }
+    }
+}
+@Composable
+fun AddPerson(navController: NavController){
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp)
+    ) {
+        OutlinedTextField(
+            value = "",
+            onValueChange = { },
+            label = { Text("Nom du sous-projet") },
+            modifier = Modifier.fillMaxWidth()
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+        OutlinedTextField(
+            value = "",
+            onValueChange = { },
+            label = { Text("Description du sous-projet") },
+            modifier = Modifier.fillMaxWidth()
+        )
+        Spacer(modifier = Modifier.height(32.dp))
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Button(
+                onClick = {},
+                modifier = Modifier.width(200.dp)
+            ) {
+                Text("Ajouter sous-projet")
+            }
+            Spacer(modifier = Modifier.width(16.dp))
+            Button(
+                onClick = { navController.popBackStack() },
+                modifier = Modifier.width(200.dp)
+            ) {
+                Text("Retour")
+            }
+        }
+    }
 }
 
+
 @Composable
-fun Detail(){
+fun MyApp(context: Context) {
+    val navController = rememberNavController()
+
+    NavHost(
+        navController = navController,
+        startDestination = "detail"
+    ) {
+        composable("detail") {
+            Detail(navController = navController,context)
+        }
+        composable("InfoProject") {
+            InfoProject(navController = navController)
+        }
+        composable("AddTasks") {
+            AddTasks(navController = navController)
+        }
+        composable("AddPerson") {
+            AddPerson(navController = navController)
+        }
+    }
+}
+
+
+@Composable
+fun Detail(navController: NavController,context: Context){
     Surface {
         Column {
             Header()
             Box {
-                ActionIcons()
+                ActionIcons(navController)
             }
             Box(
                 modifier = Modifier
@@ -78,11 +202,11 @@ fun Detail(){
                     modifier = Modifier.fillMaxWidth(),
                     colors = ButtonDefaults.buttonColors(backgroundColor = Color.Blue)
                 ) {
-                    Text(text = "add", color = Color.White)
+                    Text(text = "Supprimer Le Projet", color = Color.White)
                 }
             }
             Box {
-                TaskCard3Preview()
+                TaskCard3Preview(context)
             }
 
         }
@@ -148,9 +272,8 @@ fun Header(){
 }
 
 
-@Preview(showBackground = true)
 @Composable
-fun ActionIcons(){
+fun ActionIcons(navController: NavController){
 
         Surface {
             Row(
@@ -165,7 +288,7 @@ fun ActionIcons(){
                     Column(
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        IconButton(onClick = { /*TODO*/ }) {
+                        IconButton(onClick = {navController.navigate("AddPerson")}) {
                             Icon(
                                 imageVector = Icons.Default.Person,
                                 contentDescription = "",
@@ -194,7 +317,7 @@ fun ActionIcons(){
                     Column(
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        IconButton(onClick = { /*TODO*/ }) {
+                        IconButton(onClick = {navController.navigate("AddTasks")}) {
                             Icon(
                                 imageVector = Icons.Default.Add,
                                 contentDescription = "",
@@ -222,7 +345,7 @@ fun ActionIcons(){
                     Column(
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        IconButton(onClick = { /*TODO*/ }) {
+                        IconButton(onClick = {navController.navigate("InfoProject")}) {
                             Icon(
                                 imageVector = Icons.Default.Info,
                                 contentDescription = "",
@@ -255,7 +378,7 @@ fun ActionIcons(){
 
 
 @Composable
-fun TasksChart(tasks: List<Task3>) {
+fun TasksChart(tasks: List<Task>) {
     val completedTasksCount = tasks.count { it.isCompleted }
     val totalTasksCount = tasks.size
     val completedTasksPercentage = if (totalTasksCount > 0) {
@@ -323,31 +446,10 @@ fun TasksChart(tasks: List<Task3>) {
 }
 
 
-data class Task3(
-    val name: String,
-    val description: String,
-    val dueDate: String,
-    var isCompleted: Boolean,
-    var assignedMembers: String,
-)
-
-val taskList = listOf(
-    Task3("FRERE","Fils de mon pere","23/01/2023",true,"Ma mere"),
-    Task3("PAPA","Fils de mon pere","23/01/2023",true,"Ma mere"),
-    Task3("Mansour","Fils de mon pere","23/01/2023",true,"Ma mere"),
-    Task3("PERE","Fils de mon pere","23/01/2023",false,"Ma mere"),
-    Task3("Mansour","Fils de mon pere","23/01/2023",false,"Ma mere"),
-    )
-
-@Preview(showBackground = true)
-@Composable
-fun PreviewDiagram(){
-        TasksChart(tasks = taskList)
-}
 
 
 @Composable
-fun TaskCard3(task: Task3) {
+fun TaskCard3(task: Task) {
     Card(
         modifier = Modifier
             .padding(vertical = 8.dp, horizontal = 16.dp)
@@ -425,68 +527,18 @@ fun TaskCard3(task: Task3) {
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun TaskCard3Preview() {
-    LazyColumn {
-        items(taskList) { task ->
-            TaskCard3(task = task)
-        }
-    }
-}
+
+
 
 @Composable
-fun CalendarCard() {
-    Card(
-        modifier = Modifier
-            .padding(16.dp)
-            .fillMaxWidth(),
-        elevation = 4.dp
-    ) {
-        Column(
-            modifier = Modifier
-                .padding(16.dp)
-                .fillMaxWidth()
-        ) {
-            // Titre de la carte
-            Text(
-                text = "Calendrier",
-                fontWeight = FontWeight.Bold,
-                fontSize = 20.sp,
-                modifier = Modifier.padding(bottom = 8.dp)
-            )
+fun TaskCard3Preview(context:Context) {
+        LazyColumn {
 
-            // Calendrier
-            val calendar = Calendar.getInstance()
-            val today = calendar.timeInMillis
-            var maxDate = calendar.apply { add(Calendar.MONTH, 6) }.timeInMillis
-
-            AndroidView(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(400.dp)
-                    .padding(vertical = 16.dp),
-                factory = { context ->
-                    CalendarView(context).apply {
-                        firstDayOfWeek = Calendar.MONDAY
-                        minDate = today
-                        maxDate = maxDate
-
-
-                        setOnDateChangeListener { _, year, month, dayOfMonth ->
-                            // Gérer la sélection de la date
-                        }
-
-                    }
+            GlobalScope.launch(Dispatchers.IO) {
+                val data= AppDatabase.getInstance(context).taskDao().getAll()
+                items(data) { task ->
+                    TaskCard3(task = task)
                 }
-            )
+            }
         }
-    }
-}
-
-
-@Preview(showBackground = true)
-@Composable
-fun CalendarPreview(){
-    CalendarCard()
 }
