@@ -20,6 +20,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -27,10 +28,11 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.myapplication.projetmobile.TopBarMenu
 import com.example.myapplication.ui.theme.MyApplicationTheme
 import com.example.myapplication.view.layout.Drawer
 import com.example.myapplication.view.layout.Menu
-import com.example.myapplication.view.layout.Navigation
+import com.example.myapplication.view.layout.Navigation as Navigation
 
 class MyAppHome: ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,6 +41,8 @@ class MyAppHome: ComponentActivity() {
             MyApplicationTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colors.background) {
+             //       val navController = rememberNavController()
+
                     ScaffoldExamples()
 
 
@@ -81,7 +85,7 @@ val projectsItem = listOf(
     )
 )
 @Composable
-fun ProjectsList() {
+private fun ProjectsList() {
     LazyColumn {
         items(projectsItem) { project ->
             ProjectCard(project)
@@ -90,7 +94,7 @@ fun ProjectsList() {
 }
 
 @Composable
-fun ProjectCard(project: Project) {
+private fun ProjectCard(project: Project) {
     var isExpanded by remember { mutableStateOf(false) }
 
     Card(
@@ -133,14 +137,6 @@ fun ProjectCard(project: Project) {
                         color = MaterialTheme.colors.onSurface
                     )
                 }
-            } else {
-                Icon(
-                    imageVector = Icons.Filled.ArrowDropDown,
-                    contentDescription = null,
-                    tint = MaterialTheme.colors.onSurface
-                )
-            }
-            if (isExpanded) {
                 Spacer(modifier = Modifier.height(8.dp))
                 Row(
                     modifier = Modifier.fillMaxWidth(),
@@ -149,11 +145,12 @@ fun ProjectCard(project: Project) {
                     TextButton(
                         modifier = Modifier
                             .background(Color(color = colorPersonnel))
-                            .clip(CircleShape)
                             .border(2.dp, color = Color.White, CircleShape)
-                            .padding(horizontal = 16.dp, vertical = 8.dp),
-
-                        onClick = {},
+                            .padding(horizontal = 16.dp, vertical = 8.dp)
+                            .shadow(8.dp),
+                        onClick = {
+                            //envoie dans un autre lien
+                        },
 
                         content = {
                             Text(
@@ -164,6 +161,12 @@ fun ProjectCard(project: Project) {
                         }
                     )
                 }
+            } else {
+                Icon(
+                    imageVector = Icons.Filled.ArrowDropDown,
+                    contentDescription = null,
+                    tint = MaterialTheme.colors.onSurface
+                )
             }
         }
     }
@@ -174,6 +177,8 @@ fun ScaffoldExamples() {
 
     // create a scaffold state, set it to close by default
     val scaffoldState = rememberScaffoldState(rememberDrawerState(DrawerValue.Closed))
+    val onMenuCliked = DrawerValue.Closed
+
 
     // Create a coroutine scope. Opening of
     // Drawer and snackbar should happen in
@@ -188,9 +193,24 @@ fun ScaffoldExamples() {
             Box(modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 8.dp)){
+                //Navigation().barNavigation(Drawer().drawerView())
                 Navigation().barNavigation()
+
+
+            //.barNavigation { Drawer().drawerView() }
             }
         },
+       /*
+        topBar = {
+            TopBarMenu (
+                onMenuCliked = {
+                    carotineScop.launch {
+                        scaffoldState.drawerState.open()
+                    }
+                }
+                )
+            },
+        */
         // Pass the body in
         // content parameter
         content = { ProjectsList() },
