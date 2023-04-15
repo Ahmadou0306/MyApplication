@@ -54,7 +54,7 @@ class MyAppHome: ComponentActivity() {
 private val colorPersonnel =0xFF1E88E5
 
 
-data class Project(
+data class Projects(
     val id: String,
     val name: String,
     val description: String,
@@ -62,21 +62,21 @@ data class Project(
     val status: String
 )
 val projectsItem = listOf(
-    Project(
+    Projects(
         id = "1",
         name = "Projet Messi",
         description = "Description du projet A",
         deadline = "01/06/2023",
         status = "En cours"
     ),
-    Project(
+    Projects(
         id = "2",
         name = "Creation Application Mobile Kotlin",
         description = "Description du projet B",
         deadline = "30/09/2023",
         status = "En attente"
     ),
-    Project(
+    Projects(
         id = "3",
         name = "Preparation Magal",
         description = "Description du projet C",
@@ -94,7 +94,7 @@ private fun ProjectsList() {
 }
 
 @Composable
-private fun ProjectCard(project: Project) {
+private fun ProjectCard(project: Projects) {
     var isExpanded by remember { mutableStateOf(false) }
 
     Card(
@@ -177,7 +177,7 @@ fun ScaffoldExamples() {
 
     // create a scaffold state, set it to close by default
     val scaffoldState = rememberScaffoldState(rememberDrawerState(DrawerValue.Closed))
-    val onMenuCliked = DrawerValue.Closed
+    var onMenuCliked by remember { mutableStateOf(false) }
 
 
     // Create a coroutine scope. Opening of
@@ -194,7 +194,11 @@ fun ScaffoldExamples() {
                 .fillMaxWidth()
                 .padding(bottom = 8.dp)){
                 //Navigation().barNavigation(Drawer().drawerView())
-                Navigation().barNavigation()
+              //  onMenuCliked=
+                    if(Navigation(onMenuCliked).barNavigation()){
+                       // Drawer draw =  Drawer().drawerView()
+                    }
+
 
 
             //.barNavigation { Drawer().drawerView() }
@@ -213,11 +217,14 @@ fun ScaffoldExamples() {
         */
         // Pass the body in
         // content parameter
-        content = { ProjectsList() },
+        content = {
+            ProjectsList()
+                  },
         // pass the drawer
         drawerContent = {
             Drawer().drawerView()
         },
+        drawerGesturesEnabled = false,
         isFloatingActionButtonDocked = true,
         floatingActionButton = {
             // Create a floating action button in
@@ -238,6 +245,7 @@ fun ScaffoldExamples() {
 
     )
 }
+
 
 
 
