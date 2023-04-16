@@ -62,7 +62,7 @@ fun BottomBar(){
     )
     ) {
 
-    Text(text = "Add", color = Color.White)
+    Text(text = "", color = Color.White)
 
     }
 }
