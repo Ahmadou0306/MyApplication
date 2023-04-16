@@ -1,4 +1,4 @@
-package com.example.myapplication.projetmobile.dataSource
+package com.example.myapplication.projetmobile.models
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

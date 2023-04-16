@@ -1,37 +1,35 @@
 package com.example.myapplication.projetmobile.dataSource
 
+import android.app.Application
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import androidx.room.migration.Migration
-import androidx.sqlite.db.SupportSQLiteDatabase
+import com.example.myapplication.projetmobile.models.Task
 
-@Database(entities = [Task::class], version = 2)
-abstract class AppDatabase : RoomDatabase() {
+@Database(entities = [Task::class],version = 1)
+abstract class TaskDatabase: RoomDatabase() {
 
-    abstract fun taskDao(): TaskDao
+    abstract fun  taskDAO() : TaskDao
 
-    companion object {
-        private var instance: AppDatabase? = null
+    companion object{
 
-        fun getInstance(context: Context): AppDatabase {
-            if (instance == null) {
-                instance = Room.databaseBuilder(
-                    context.applicationContext,
-                    AppDatabase::class.java,
-                    "my-database"
-                )
-                    .addMigrations(MIGRATION_1_2)
-                    .build()
-            }
-            return instance!!
-        }
-
-        private val MIGRATION_1_2 = object : Migration(1, 2) {
-            override fun migrate(database: SupportSQLiteDatabase) {
-                // write code to migrate data from version 1 to version 2
+        private var INSTANCE : TaskDatabase? = null
+        fun getInstance(application: Application): TaskDatabase {
+            synchronized(this){
+                var instance = INSTANCE
+                if(instance==null){
+                    instance = Room.databaseBuilder(
+                        application.applicationContext,
+                        TaskDatabase::class.java,
+                        "todo_list_database"
+                    ).fallbackToDestructiveMigration()
+                        .build()
+                    INSTANCE=instance
+                }
+                return instance
             }
         }
+
     }
 }

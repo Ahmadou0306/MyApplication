@@ -1,7 +1,6 @@
-package com.example.myapplication.projetmobile
+package com.example.myapplication.projetmobile.ui
 
-import android.R
-import android.content.Context
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
@@ -12,26 +11,33 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
-import com.example.myapplication.projetmobile.dataSource.AppDatabase
-import com.example.myapplication.projetmobile.dataSource.Task
+import androidx.lifecycle.viewmodel.compose.viewModel
+
+import com.example.myapplication.projetmobile.models.Task
+import com.example.myapplication.projetmobile.viewsmodels.TaskViewModel
 import com.example.myapplication.ui.theme.MyApplicationTheme
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
+
 class TaskForm :ComponentActivity(){
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContent {
+            val viewModel:TaskViewModel= viewModel()
             MyApplicationTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colors.background) {
-                    AddTaskScreen(this)
+                    AddTaskScreen(viewModel = viewModel)
                 }
             }
         }
@@ -40,8 +46,9 @@ class TaskForm :ComponentActivity(){
 
 data class TaskFormData(var name: String, var description: String, var dueDate: String, var assignedMembers: String)
 
+@SuppressLint("SuspiciousIndentation")
 @Composable
-fun AddTaskScreen(context: Context) {
+fun AddTaskScreen(viewModel: TaskViewModel) {
     // Les états du formulaire
     val nameState = remember { mutableStateOf(TextFieldValue()) }
     val descriptionState = remember { mutableStateOf(TextFieldValue()) }
@@ -56,35 +63,6 @@ fun AddTaskScreen(context: Context) {
     }
 
     // La fonction pour valider le formulaire et ajouter une tâche
-    fun addTask() {
-        val formData = TaskFormData(
-            name = nameState.value.text,
-            description = descriptionState.value.text,
-            dueDate = dueDateState.value.text,
-            assignedMembers = assignedMembersState.value.text
-        )
-
-        val task = Task(
-            id = 0/* générer un nouvel ID */,
-            name = formData.name,
-            description = formData.description,
-            dueDate = formData.dueDate,
-            isCompleted = false,
-            assignedMembers = formData.assignedMembers
-        )
-
-        try {
-            GlobalScope.launch(Dispatchers.IO) {
-                val data=AppDatabase.getInstance(context).taskDao().insert(task)
-                Log.d("TaskForm","data:$data")
-                reiniText()
-            }
-        }catch (e:Exception){
-            Log.d("TaskForm error","${e.message}")
-        }
-
-    }
-
 
     // Le formulaire
     Column(modifier = Modifier.padding(16.dp)) {
@@ -119,7 +97,10 @@ fun AddTaskScreen(context: Context) {
         )
 
         Button(
-            onClick = {addTask()},
+            onClick = {
+
+                        viewModel.addTask(Task(0,"d","d","s",false,"df"))
+                      },
             modifier = Modifier
                 .padding(vertical = 16.dp)
         ) {
@@ -127,7 +108,7 @@ fun AddTaskScreen(context: Context) {
         }
         Button(
             onClick = {
-                listTask(context)
+                      taskListScreen(viewModel)
                       },
             modifier = Modifier
                 .padding(vertical = 16.dp)
@@ -136,17 +117,12 @@ fun AddTaskScreen(context: Context) {
         }
     }
 }
-fun listTask(context: Context){
 
-    try {
-
-        GlobalScope.launch(Dispatchers.IO) {
-            val data=AppDatabase.getInstance(context).taskDao().getAll()
-            Log.d("TaskForm","data:$data")
-        }
-    }catch (e:Exception){
-        Log.d("TaskForm","${e.message}")
-    }
-
-
+fun taskListScreen(
+    viewModel: TaskViewModel
+) {
+    val tasks = viewModel.allTasks
+    
+    Log.d("d","${tasks.value}")
+    
 }

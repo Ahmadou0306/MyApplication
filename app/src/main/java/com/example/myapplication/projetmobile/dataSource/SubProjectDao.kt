@@ -4,17 +4,19 @@ import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
+import com.example.myapplication.projetmobile.models.Task
+
 @Dao
 interface SubProjectDao {
     @Query("SELECT * FROM subproject")
     fun getAll():List<Task>
 
     @Insert
-    fun insertAll(vararg task:Task)
+    fun insertAll(vararg task: Task)
 
     @Insert
-    fun insert( task:Task)
+    fun insert( task: Task)
 
     @Delete
-    fun delete(task:Task)
+    fun delete(task: Task)
 }

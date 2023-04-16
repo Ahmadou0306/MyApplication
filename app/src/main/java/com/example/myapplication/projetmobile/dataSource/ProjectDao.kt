@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
+import com.example.myapplication.projetmobile.models.Project
 
 @Dao
 interface ProjectDao {
@@ -11,8 +12,8 @@ interface ProjectDao {
     fun getAll():List<Project>
 
     @Insert
-    fun insertAll(vararg project:Project)
+    fun insertAll(vararg project: Project)
 
     @Delete
-    fun delete(project:Project)
+    fun delete(project: Project)
 }

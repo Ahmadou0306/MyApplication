@@ -1,21 +1,23 @@
 package com.example.myapplication.projetmobile.dataSource
 
+import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
+import com.example.myapplication.projetmobile.models.Task
 
 @Dao
-public interface TaskDao {
+ interface TaskDao {
     @Query("SELECT * FROM task")
-    fun getAll():List<Task>
+    fun getAll():LiveData<List<Task>>
 
     @Insert
-    fun insertAll(vararg task:Task)
+    suspend fun insertAll(vararg task: Task)
 
     @Insert
-    fun insert( task:Task)
+    suspend fun insert( task: Task)
 
     @Delete
-    fun delete(task:Task)
+    suspend fun delete(task: Task)
 }

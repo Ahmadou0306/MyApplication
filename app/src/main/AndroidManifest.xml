@@ -34,7 +34,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".projetmobile.DetailsProject"
+            android:name=".projetmobile.ui.DetailsProject"
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.MyApplication">
@@ -45,7 +45,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".projetmobile.TaskForm"
+            android:name=".projetmobile.ui.TaskForm"
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.MyApplication"

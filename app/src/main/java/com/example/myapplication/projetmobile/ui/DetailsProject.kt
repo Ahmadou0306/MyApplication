@@ -1,7 +1,6 @@
 @file:Suppress("UNREACHABLE_CODE")
 
-package com.example.myapplication.projetmobile
-import android.content.Context
+package com.example.myapplication.projetmobile.ui
 import android.graphics.Paint
 import android.graphics.Typeface
 import android.os.Bundle
@@ -19,7 +18,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.Composable
-
+import  androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -32,20 +31,17 @@ import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.myapplication.projetmobile.dataSource.AppDatabase
-import com.example.myapplication.projetmobile.dataSource.Task
+import com.example.myapplication.projetmobile.models.Task
 import com.example.myapplication.ui.theme.MyApplicationTheme
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 
 import java.util.*
 
@@ -59,7 +55,7 @@ class DetailsProject :ComponentActivity(){
             MyApplicationTheme {
                 // A surface container using the 'background' color from the theme
                 Surface( color = MaterialTheme.colors.background) {
-                    MyApp(this)
+                    MyApp()
                 }
             }
         }
@@ -161,7 +157,7 @@ fun AddPerson(navController: NavController){
 
 
 @Composable
-fun MyApp(context: Context) {
+fun MyApp() {
     val navController = rememberNavController()
 
     NavHost(
@@ -169,7 +165,7 @@ fun MyApp(context: Context) {
         startDestination = "detail"
     ) {
         composable("detail") {
-            Detail(navController = navController,context)
+            Detail()
         }
         composable("InfoProject") {
             InfoProject(navController = navController)
@@ -185,12 +181,11 @@ fun MyApp(context: Context) {
 
 
 @Composable
-fun Detail(navController: NavController,context: Context){
+fun Detail(){
     Surface {
         Column {
             Header()
             Box {
-                ActionIcons(navController)
             }
             Box(
                 modifier = Modifier
@@ -206,7 +201,7 @@ fun Detail(navController: NavController,context: Context){
                 }
             }
             Box {
-                TaskCard3Preview(context)
+                TaskCard3Preview()
             }
 
         }
@@ -528,17 +523,8 @@ fun TaskCard3(task: Task) {
 }
 
 
-
-
 @Composable
-fun TaskCard3Preview(context:Context) {
-        LazyColumn {
+fun TaskCard3Preview() {
 
-            GlobalScope.launch(Dispatchers.IO) {
-                val data= AppDatabase.getInstance(context).taskDao().getAll()
-                items(data) { task ->
-                    TaskCard3(task = task)
-                }
-            }
-        }
 }
+
