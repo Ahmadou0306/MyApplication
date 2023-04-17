@@ -17,6 +17,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.unit.*
 import com.example.myapplication.projetmobile.Participants
+import com.example.myapplication.view.MyAppHome
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -25,7 +26,9 @@ class MainActivity : ComponentActivity() {
             MyApplicationTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colors.background) {
-                   Participants().AddParticipantScreen()
+                  // Participants().AddParticipantScreen()
+                    MyAppHome().homepage()
+
                 }
 
             }
