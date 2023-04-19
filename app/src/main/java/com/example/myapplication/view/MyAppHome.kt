@@ -193,11 +193,7 @@ fun ScaffoldExamples() {
             Box(modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 8.dp)){
-                //Navigation().barNavigation(Drawer().drawerView())
-              //  onMenuCliked=
-                    if(Navigation(onMenuCliked).barNavigation()){
-                       // Drawer draw =  Drawer().drawerView()
-                    }
+               onMenuCliked=Navigation(onMenuCliked).barNavigation()
 
 
 
@@ -224,7 +220,7 @@ fun ScaffoldExamples() {
         drawerContent = {
             Drawer().drawerView()
         },
-        drawerGesturesEnabled = false,
+        drawerGesturesEnabled = onMenuCliked,
         isFloatingActionButtonDocked = true,
         floatingActionButton = {
             // Create a floating action button in
