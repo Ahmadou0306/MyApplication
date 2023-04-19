@@ -5,31 +5,27 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.example.myapplication.projetmobile.models.Task
+import com.example.myapplication.projetmobile.dataSource.dao.MemberDao
+import com.example.myapplication.projetmobile.dataSource.models.Member
+import com.example.myapplication.projetmobile.dataSource.models.Task
 
-@Database(entities = [Task::class],version = 1)
-abstract class TaskDatabase: RoomDatabase() {
-
-    abstract fun  taskDAO() : TaskDao
-
-    companion object{
-
-        private var INSTANCE : TaskDatabase? = null
-        fun getInstance(application: Application): TaskDatabase {
-            synchronized(this){
-                var instance = INSTANCE
-                if(instance==null){
-                    instance = Room.databaseBuilder(
-                        application.applicationContext,
-                        TaskDatabase::class.java,
-                        "todo_list_database"
-                    ).fallbackToDestructiveMigration()
-                        .build()
-                    INSTANCE=instance
-                }
-                return instance
+@Database(entities = [Task::class,Member::class], version = 1, exportSchema = false)
+abstract class ProjectDataBase : RoomDatabase() {
+    abstract fun taskDao(): TaskDao
+    abstract fun memberDao(): MemberDao
+    companion object {
+        @Volatile
+        private var INSTANCE: ProjectDataBase? = null
+        fun getDatabase(context: Context): ProjectDataBase {
+            return INSTANCE ?: synchronized(this) {
+                val instance = Room.databaseBuilder(
+                    context.applicationContext,
+                    ProjectDataBase::class.java,
+                    "project_db"
+                ).build()
+                INSTANCE = instance
+                instance
             }
         }
-
     }
 }

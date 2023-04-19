@@ -1,11 +1,11 @@
-package com.example.myapplication.projetmobile.models
+package com.example.myapplication.projetmobile.dataSource.models
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "task")
-data class Task(
+@Entity(tableName = "subproject")
+data class SousProject(
     @PrimaryKey(autoGenerate = true) val id: Int=0,
     @ColumnInfo(name = "name")
     val name: String,

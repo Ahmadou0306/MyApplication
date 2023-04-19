@@ -1,18 +1,22 @@
 package com.example.myapplication.projetmobile.repository
 
-import androidx.lifecycle.LiveData
 import com.example.myapplication.projetmobile.dataSource.TaskDao
-import com.example.myapplication.projetmobile.models.Task
+import com.example.myapplication.projetmobile.dataSource.models.Task
+import kotlinx.coroutines.Dispatchers
 
 
 class TaskRepository(private val taskDao: TaskDao) {
-    val readAllData : LiveData<List<Task>> =  taskDao.getAll()
-    suspend fun addTask(todoItem: Task) {
-        taskDao.insert(todoItem)
+    val readAllData =  taskDao.getAll()
+    suspend fun addTask(task: Task) {
+        Dispatchers.IO.apply {
+            taskDao.insert(task)
+        }
     }
 
-    suspend fun deleteTodo(todoItem: Task) {
-        taskDao.delete(todoItem)
+    suspend fun deleteTask(task: Task) {
+        Dispatchers.IO.apply {
+            taskDao.delete(task.id)
+        }
     }
 
 }

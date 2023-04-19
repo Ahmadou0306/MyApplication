@@ -4,7 +4,7 @@ import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
-import com.example.myapplication.projetmobile.models.Project
+import com.example.myapplication.projetmobile.dataSource.models.Project
 
 @Dao
 interface ProjectDao {

@@ -1,4 +1,4 @@
-package com.example.myapplication.projetmobile.models
+package com.example.myapplication.projetmobile.dataSource.models
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
@@ -13,6 +13,8 @@ data class Project(
     val description: String,
     @ColumnInfo(name = "dueDate")
     val dueDate: String,
+    @ColumnInfo(name = "dueDate")
+    val dueDateFin: String,
     @ColumnInfo(name = "isCompleted")
     var isCompleted: Boolean=false,
     @ColumnInfo(name = " assignedMembers")
