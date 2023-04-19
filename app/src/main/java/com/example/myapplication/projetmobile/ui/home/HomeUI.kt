@@ -1,5 +1,6 @@
 package com.example.myapplication.projetmobile.ui.home
 
+import android.annotation.SuppressLint
 import androidx.compose.animation.core.*
 
 import androidx.compose.foundation.border
@@ -22,8 +23,9 @@ import kotlinx.coroutines.launch
 
 
 
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
-fun Home(navHostController: NavHostController) {
+fun Home1(navHostController: NavHostController) {
 
     // create a scaffold state, set it to close by default
     val scaffoldState = rememberScaffoldState(rememberDrawerState(DrawerValue.Closed))
