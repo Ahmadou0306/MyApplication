@@ -1,7 +1,6 @@
 
 package com.example.myapplication.projetmobile.ui.detailsProject
 
-import android.media.Image
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -17,6 +16,8 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -24,43 +25,46 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.semantics.Role.Companion.Image
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavHostController
 import com.example.myapplication.R
-import com.example.myapplication.projetmobile.NavRoute
 import com.example.myapplication.projetmobile.dataSource.models.Task
-import com.example.myapplication.projetmobile.ui.task.taskListScreen
+import com.example.myapplication.projetmobile.ui.detailsProject.composable.AddMemberModal
+import com.example.myapplication.projetmobile.ui.detailsProject.composable.AddSubProjectModal
+import com.example.myapplication.projetmobile.ui.detailsProject.composable.AddTaskModal
+import com.example.myapplication.projetmobile.ui.detailsProject.composable.MembersList
+import com.example.myapplication.projetmobile.viewsmodels.MemberViewModel
 import com.example.myapplication.projetmobile.viewsmodels.TaskViewModel
 
 const val colorPersonnel=0xFF1E88E5
 
-
-data class ActionButtonData(val icon: ImageVector, val text: String)
+data class ActionButtonData(val icon: ImageVector, val text: String, val action: () -> Unit)
 
 @Composable
-fun ActionButton(icon: ImageVector, text: String,onclick:()->Unit) {
+fun ActionButton(buttonData: ActionButtonData, onNavigate: () -> Unit) {
     Box(
         contentAlignment = Alignment.Center,
-        modifier=Modifier.clickable{onclick()}
+        modifier = Modifier.clickable {
+            buttonData.action()
+            onNavigate()
+        }
     ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             IconButton(
-                onClick = onclick,
-            modifier = Modifier
-                .width(35.dp)
-                .border(
-                    2.dp,
-            Color(colorPersonnel),
-            CircleShape
-            )
+                onClick = buttonData.action,
+                modifier = Modifier
+                    .width(35.dp)
+                    .border(
+                        2.dp,
+                        Color.Green,
+                        CircleShape
+                    )
             ) {
                 Icon(
-                    imageVector = icon,
+                    imageVector = buttonData.icon,
                     contentDescription = "",
                     modifier = Modifier
                         .size(45.dp)
@@ -68,7 +72,7 @@ fun ActionButton(icon: ImageVector, text: String,onclick:()->Unit) {
                 )
             }
             Text(
-                text = text,
+                text = buttonData.text,
                 fontSize = 15.sp,
                 color = MaterialTheme.colors.onSurface.copy(alpha = 0.8f)
             )
@@ -76,15 +80,18 @@ fun ActionButton(icon: ImageVector, text: String,onclick:()->Unit) {
     }
 }
 
-
-
 @Composable
-fun ActionIcons(onNavigate:()->Unit) {
+fun ActionIcons(selectedId: Int, onNavigate: () -> Unit) {
+
+
+    var showDialogMember = remember { mutableStateOf(false) }
+    var showDialogSubProject = remember { mutableStateOf(false) }
+    var showDialogTask = remember { mutableStateOf(false) }
     val buttonData = listOf(
-        ActionButtonData(Icons.Default.Create, "Add Sous-projet"),
-        ActionButtonData(Icons.Default.Add, "Add tâche"),
-        ActionButtonData(Icons.Default.Person, "Ajouter Un Membre"),
-        ActionButtonData(Icons.Default.Info, "Diagram"),
+        ActionButtonData(Icons.Default.Create, "Add Sous-projet") {showDialogSubProject.value=true},
+        ActionButtonData(Icons.Default.Add, "Add tâche") {showDialogTask.value=true},
+        ActionButtonData(Icons.Default.Person, "Ajouter Un Membre") { showDialogMember.value = true },
+        ActionButtonData(Icons.Default.Info, "Diagram") {}
     )
 
     LazyRow(
@@ -93,26 +100,37 @@ fun ActionIcons(onNavigate:()->Unit) {
         modifier = Modifier.fillMaxWidth()
     ) {
         items(buttonData) { data ->
-            ActionButton(icon = data.icon, text = data.text, onclick = {
+            ActionButton(data,onNavigate={
                 when(data){
-                    buttonData[2]-> onNavigate()
-
+                    buttonData[3]->onNavigate
                     else->{}
                 }
             })
         }
     }
+    AddMemberModal(showDialogMember,selectedId)
+    AddSubProjectModal(showDialogSubProject, selectedId)
+    AddTaskModal(showDialogTask , selectedId)
 }
 
 @Composable
-fun DetailHome(onNavigate: () -> Unit) {
+fun ListMembers(){
+    val viewModel = viewModel(MemberViewModel::class.java)
+    MembersList(members = viewModel.memberList)
+}
+
+@Composable
+fun DetailHome(
+    selectedId: Int,
+    onNavigate: () -> Unit
+) {
     Surface {
         Column {
             Box{
                 Header()
             }
             Box {
-                ActionIcons(onNavigate)
+                ActionIcons(selectedId,onNavigate)
             }
             Box(
                 modifier = Modifier
@@ -131,61 +149,14 @@ fun DetailHome(onNavigate: () -> Unit) {
                 TroisCards()
             }
 
-        }
-    }
-
-
-
-
-
-    @Composable
-    fun MembersList(members: List<String>) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(Color.White)
-                .padding(16.dp)
-        ) {
-            Text(
-                text = "Membres du projet",
-                fontSize = 20.sp,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(bottom = 16.dp)
-            )
-            Divider(color = Color.Gray, thickness = 0.5.dp, modifier = Modifier.padding(bottom = 16.dp))
-            members.forEach { member ->
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.padding(bottom = 8.dp)
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Person,
-                        contentDescription = "Icone personne",
-                        tint = Color.Gray,
-                        modifier = Modifier.size(24.dp)
-                    )
-                    Text(
-                        text = member,
-                        fontSize = 16.sp,
-                        fontWeight = FontWeight.Medium,
-                        color = Color.Black,
-                        modifier = Modifier.padding(start = 16.dp, end = 16.dp)
-                    )
-                    Spacer(modifier = Modifier.weight(1f))
-                    IconButton(
-                        onClick = {},
-                        modifier = Modifier.size(24.dp)
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.Delete,
-                            contentDescription = "Bouton supprimer",
-                            tint = Color.Red
-                        )
-                    }
-                }
+            Box {
+               ListMembers()
             }
+
         }
     }
+
+
 }@Composable
 fun TroisCards() {
     val cardPadding = 16.dp
@@ -200,7 +171,11 @@ fun TroisCards() {
     ) {
         itemsIndexed(cards) { index, card ->
             Box(
-                Modifier.padding(start = cardPadding, end = cardPadding, top = 50.dp)
+                Modifier.padding(
+                    start = cardPadding,
+                    end = cardPadding,
+                    top = 50.dp,
+                )
             ) {
                 Card(
                     shape = RoundedCornerShape(8.dp),
@@ -208,6 +183,7 @@ fun TroisCards() {
                     modifier = Modifier
                         .width(300.dp)
                         .height(250.dp)
+                        .padding(bottom = 16.dp)
                 ) {
                     Column(
                         Modifier

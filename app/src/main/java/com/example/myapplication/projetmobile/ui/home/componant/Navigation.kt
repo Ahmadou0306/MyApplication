@@ -9,16 +9,13 @@ import androidx.compose.material.icons.filled.Menu
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
-
- //class Navigation(var onMenuCliked:Boolean): ViewModel() {
 
 
      @Composable
      fun barNavigation(onMenuClicked:()-> Unit) {
-
-         //var enableDrawer by remember { mutableStateOf(false) }
          TopAppBar(
              navigationIcon = {
                  Icon(
@@ -34,14 +31,15 @@ import androidx.lifecycle.ViewModel
                  Text(
                      text = "TeamFlow",
                      color = Color.White,
-                     modifier = Modifier.padding(horizontal = 50.dp)
+                     modifier = Modifier
+                         .fillMaxWidth()
+                         .padding(start = 70.dp)
+                     ,
+
                  )
              },
              backgroundColor = Color(color = 0xFF1E88E5)
          )
 
-         //return onMenuCliked
      }
-
-
 

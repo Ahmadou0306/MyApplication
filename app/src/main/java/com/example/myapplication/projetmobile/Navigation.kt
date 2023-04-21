@@ -1,19 +1,23 @@
 package com.example.myapplication.projetmobile
 
 import androidx.compose.runtime.Composable
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.example.myapplication.projetmobile.ui.detailsProject.DetailHome
+import com.example.myapplication.projetmobile.ui.detailsProject.composable.TasksChart
 import com.example.myapplication.projetmobile.ui.home.Home
-import com.example.myapplication.projetmobile.ui.member.AddMemberForm
-import com.example.myapplication.projetmobile.ui.task.AddTaskScreen
+import com.example.myapplication.projetmobile.ui.project.AddFormProject
 
 sealed class NavRoute(val route: String) {
     object Home : NavRoute("Home")
     object AddTaskScreen : NavRoute("AddTaskScreen")
     object AddMemberForm:NavRoute("AddMemberForm")
     object DetailHome:NavRoute("DetailHome")
+    object AddFormProject:NavRoute("AddFormProject")
+    object TasksChart:NavRoute("TasksChart")
 }
 
 @Composable
@@ -24,31 +28,42 @@ fun NavHost() {
         navController = navController,
         startDestination = NavRoute.Home.route,
     ) {
+        //ROUTE HOME
         composable(NavRoute.Home.route) {
-            Home(navController)
+            Home(onNavigate = {project ->
+                if(project==null){
+                    navController.navigate(NavRoute.AddFormProject.route)
+                }else{
+                    navController.navigate(NavRoute.DetailHome.route+"/${project.id}")
+                }
+            })
         }
 
-        composable(NavRoute.AddTaskScreen.route) {
-            AddTaskScreen{
-                navController.navigate(NavRoute.AddTaskScreen.route)
-            }
-        }
-        composable(NavRoute.DetailHome.route) {
-            DetailHome{
-                navController.navigate(NavRoute.DetailHome.route)
+        //REDIRECT DETAILS VIEW
+
+        composable(
+            NavRoute.DetailHome.route+"/{id}",
+            arguments = listOf(navArgument("id") { type = NavType.IntType })
+            ){backStackEntry->
+            DetailHome(selectedId = backStackEntry.arguments?.getInt("id")?:1) {
+
+
             }
         }
 
-        composable(NavRoute.AddMemberForm.route) {
-            AddMemberForm{
-                navController.navigate(NavRoute.AddMemberForm.route)
-            }
-        }
 
-        composable(NavRoute.AddTaskScreen.route) {
-            DetailHome{
-                navController.navigate(NavRoute.AddMemberForm.route)
-            }
-        }
+
+        //REDIRECT FORM ADD PROJECT
+
+       composable(NavRoute.AddFormProject.route){
+           AddFormProject {
+               navController.navigate(NavRoute.AddFormProject.route)
+           }
+       }
+
+
+
+
+
     }
 }

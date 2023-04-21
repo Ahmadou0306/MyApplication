@@ -13,6 +13,11 @@ data class Task(
     val description: String,
     @ColumnInfo(name = "dueDate")
     val dueDate: String,
+
+
+    @ColumnInfo(name = "finDate")
+    val finDate: String,
+
     @ColumnInfo(name = "isCompleted")
     var isCompleted: Boolean=false,
     @ColumnInfo(name = " assignedMembers")

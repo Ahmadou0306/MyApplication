@@ -9,14 +9,17 @@ data class Project(
     @PrimaryKey(autoGenerate = true) val id: Int=0,
     @ColumnInfo(name = "name")
     val name: String,
+
     @ColumnInfo(name = "description")
     val description: String,
+
     @ColumnInfo(name = "dueDate")
     val dueDate: String,
-    @ColumnInfo(name = "dueDate")
+
+    @ColumnInfo(name = "dueDateFin")
     val dueDateFin: String,
+
     @ColumnInfo(name = "isCompleted")
     var isCompleted: Boolean=false,
-    @ColumnInfo(name = " assignedMembers")
-    var assignedMembers: String="",
+
 )

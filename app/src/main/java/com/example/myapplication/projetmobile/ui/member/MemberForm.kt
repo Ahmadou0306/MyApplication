@@ -15,7 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun AddMemberForm(function: () -> Unit) {
+fun AddMemberForm(addMemberNavigation: () -> Unit) {
 
 
     Column(

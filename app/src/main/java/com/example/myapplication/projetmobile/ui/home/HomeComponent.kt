@@ -35,7 +35,7 @@ import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.delay
 
 
-const val colorPersonnel=0xFF1E88E5
+private const val colorPersonnel=0xFF1E88E5
 
 
 @Composable
@@ -62,7 +62,6 @@ fun TopBarMenu(onMenuClicked: () -> Unit){
 
 
 
-@Preview(showBackground =true )
 @Composable
 fun BottomBar(){
     BottomAppBar(
