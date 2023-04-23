@@ -6,6 +6,7 @@ import com.example.myapplication.projetmobile.repository.MemberRepository
 import com.example.myapplication.projetmobile.repository.ProjectRepository
 import com.example.myapplication.projetmobile.repository.SubProjectRepository
 import com.example.myapplication.projetmobile.repository.TaskRepository
+import com.example.myapplication.projetmobile.repository.TaskToMemberRepository
 
 object Graph {
      private lateinit var dataBase: ProjectDataBase
@@ -18,6 +19,10 @@ object Graph {
     }
     val projectRepo by lazy {
         ProjectRepository(dataBase.projectDao())
+    }
+
+    val TaskToMemberRepo by lazy {
+        TaskToMemberRepository(dataBase.subTaskToMember())
     }
 
     val subProjectRepo by lazy {

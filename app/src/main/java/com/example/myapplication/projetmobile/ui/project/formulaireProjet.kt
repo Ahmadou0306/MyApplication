@@ -1,6 +1,7 @@
 
 package com.example.myapplication.projetmobile.ui.project
 
+import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.widget.DatePicker
 import androidx.compose.foundation.layout.*
@@ -21,11 +22,43 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.myapplication.projetmobile.dataSource.models.Project
+import com.example.myapplication.projetmobile.ui.home.componant.BottomBar
+import com.example.myapplication.projetmobile.ui.home.componant.FloatingActionButtonComp
+import com.example.myapplication.projetmobile.ui.home.componant.drawerView
 import com.example.myapplication.projetmobile.viewsmodels.ProjectViewModel
 import java.util.*
 
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
-fun AddFormProject(onFormNavigate: () -> Unit){
+fun AddFormProject(
+    onFormNavigate: () -> Unit,
+    onNavigate: (Project?) -> Unit,
+    onHomeNavigate:()->Unit
+){
+    Scaffold(
+        content = {
+            ScaffoldContain (onFormNavigate)
+        },
+        // pass the drawer
+        drawerContent = {
+            drawerView()
+        },
+        isFloatingActionButtonDocked = true,
+        floatingActionButton = {
+            // Create a floating action button in
+            // floatingActionButton parameter of
+            FloatingActionButtonComp(onNavigate =onNavigate)
+        },
+
+        // pass the bottomBar
+        // we created
+        bottomBar = { BottomBar(onHomeNavigate) }
+
+    )
+
+}
+@Composable
+fun ScaffoldContain(onFormNavigate: () -> Unit){
     val viewModel = viewModel(ProjectViewModel::class.java)
     val context = LocalContext.current
     val year: Int
@@ -69,7 +102,9 @@ fun AddFormProject(onFormNavigate: () -> Unit){
         viewModel.addProject(project = project)
     }
 
-    Column(modifier = Modifier.fillMaxWidth().padding(16.dp)) {
+    Column(modifier = Modifier
+        .fillMaxWidth()
+        .padding(16.dp)) {
         OutlinedTextField(
             value = name.value,
             modifier = Modifier.fillMaxWidth(),
@@ -94,7 +129,7 @@ fun AddFormProject(onFormNavigate: () -> Unit){
             value = description.value,
             modifier = Modifier.fillMaxWidth(),
             onValueChange = {
-                           description.value=it
+                description.value=it
             },
             shape= CutCornerShape(topStart = 15.dp, bottomEnd = 15.dp),
             label = { Text(text = "Project Description", color = Color(color = 0xFF1E88E5)) },
@@ -180,7 +215,7 @@ fun AddFormProject(onFormNavigate: () -> Unit){
             onClick = {
                 addProject()
                 initialForm()
-                      },
+            },
             colors = ButtonDefaults.buttonColors( backgroundColor = Color(color = 0xFF1E88E5)) ,
             modifier = Modifier.align(Alignment.CenterHorizontally),
             shape= CutCornerShape(topStart = 7.dp, bottomEnd = 7.dp),

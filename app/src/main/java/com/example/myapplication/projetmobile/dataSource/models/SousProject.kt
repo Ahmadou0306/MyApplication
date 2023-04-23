@@ -28,7 +28,4 @@ data class SousProject(
 
     @ColumnInfo(name = "dueDateFin")
     val dueDateFin: String,
-
-    @ColumnInfo(name = " assignedMembers")
-    var assignedMembers: String="",
 )

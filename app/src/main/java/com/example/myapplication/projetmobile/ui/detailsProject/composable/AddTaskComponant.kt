@@ -1,141 +1,323 @@
 package com.example.myapplication.projetmobile.ui.detailsProject.composable
 
+import android.annotation.SuppressLint
+import android.app.DatePickerDialog
+import android.widget.DatePicker
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CutCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.DropdownMenu
+import androidx.compose.material.DropdownMenuItem
+import androidx.compose.material.FloatingActionButton
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedTextField
+import androidx.compose.material.Surface
 import androidx.compose.material.Text
-import androidx.compose.material.TextButton
-import androidx.compose.material.TextField
+import androidx.compose.material.TextFieldDefaults
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.DateRange
+import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.em
+import androidx.compose.ui.unit.toSize
 import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.myapplication.projetmobile.dataSource.models.Member
 import com.example.myapplication.projetmobile.dataSource.models.Task
-import com.example.myapplication.projetmobile.ui.detailsProject.colorPersonnel
 import com.example.myapplication.projetmobile.viewsmodels.MemberViewModel
 import com.example.myapplication.projetmobile.viewsmodels.TaskViewModel
+import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.unit.sp
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.launch
+import java.util.Calendar
+import java.util.Date
 
 @Composable
 fun AddTaskModal(showDialog: MutableState<Boolean>, selectedId:Int){
+    // Modal
+    if (showDialog.value) {
+        Dialog(
 
+            onDismissRequest = { showDialog.value = false },
+            content = {
+                Surface(
+                    modifier = Modifier.fillMaxWidth(),
+                    color = Color.White,
+                    elevation = 8.dp
+                ) {
+                    Column {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(16.dp),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text(
+                                text = "Form Task",
+                                fontSize = 18.sp,
+                                fontWeight = FontWeight.Bold
+                            )
+                            IconButton(
+                                onClick = { showDialog.value = false },
+                                modifier = Modifier.size(48.dp)
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.Close,
+                                    contentDescription = null,
+                                    tint = Color.Black
+                                )
+                            }
+                        }
+                        //formulaire
+                        AddTaskForm(showDialog, selectedId)
+                    }
+                }
+            }
+
+        )
+    }
+}
+@SuppressLint("CoroutineCreationDuringComposition")
+@Composable
+fun getMemberById(id: Int): Member {
+    val viewModelMember = viewModel(MemberViewModel::class.java)
+    var member: Member? = null
+    val lifecycleOwner = LocalLifecycleOwner.current
+    lifecycleOwner.lifecycleScope.launch {
+        viewModelMember.getMemberById(id).collect {
+            member = it
+        }
+    }
+    return member!!
+}
+
+@Composable
+fun AddTaskForm(showDialog: MutableState<Boolean>, selectedId:Int){
+    //dataBase
     val viewModel = viewModel(TaskViewModel::class.java)
+    val viewModelMember = viewModel(MemberViewModel::class.java)
     // Les états du formulaire
     val nameState = remember { mutableStateOf(TextFieldValue()) }
     val descriptionState = remember { mutableStateOf(TextFieldValue()) }
-    val dueDateState = remember { mutableStateOf(TextFieldValue()) }
-    val finDateState = remember { mutableStateOf(TextFieldValue()) }
-    val assignedMembersState = remember { mutableStateOf(TextFieldValue()) }
+    val dueDateState = remember { mutableStateOf("") }
+    val finDateState = remember { mutableStateOf("") }
+    var nomSelectedMember by remember { mutableStateOf("") }
+
+
+    val context = LocalContext.current
+    val year: Int
+    val month: Int
+    val day: Int
+    val calendar = Calendar.getInstance()
+    year = calendar.get(Calendar.YEAR)
+    month = calendar.get(Calendar.MONTH)
+    day = calendar.get(Calendar.DAY_OF_MONTH)
+    calendar.time = Date()
+
+    val datePickerDialog = DatePickerDialog(
+        context,
+        { _: DatePicker, year: Int, month: Int, dayOfMonth: Int ->
+            dueDateState.value = "$dayOfMonth/$month/$year"
+        }, year, month, day
+    )
+    val datePickerDialog2 = DatePickerDialog(
+        context,
+        { _: DatePicker, year: Int, month: Int, dayOfMonth: Int ->
+            finDateState.value = "$dayOfMonth/$month/$year"
+        }, year, month, day
+    )
+
+
+
+
 
 
     fun initValue(){
         // Réinitialiser les champs
         nameState.value = TextFieldValue("")
         descriptionState.value = TextFieldValue("")
-        dueDateState.value = TextFieldValue("")
-        finDateState.value=TextFieldValue("")
-        assignedMembersState.value = TextFieldValue("")
+        dueDateState.value = ""
+        finDateState.value=""
+        nomSelectedMember=""
     }
     fun addTask(){
         val task= Task(
-          0,
-          nameState.value.text,
-          descriptionState.value.text,
-          dueDateState.value.text,
-            finDateState.value.text,
+            0,
+            selectedId,
+            nameState.value.text,
+            descriptionState.value.text,
+            dueDateState.value,
+            finDateState.value,
             false,
-            assignedMembersState.value.text
         )
         initValue()
         viewModel.add(task)
     }
 
-// Modal
-    if (showDialog.value) {
-        Dialog(
-            onDismissRequest = { showDialog.value = false },
-            content = {
-                //formulaire
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 30.dp, vertical = 30.dp)
-                        .background(Color.White)
-                        .padding(horizontal = 40.dp)
-                    ,
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(400.dp)
+            .background(Color.White)
+            .padding(horizontal = 20.dp)
+        ,
 
-                ) {
-                    Text("Ajouter une tâche", style = MaterialTheme.typography.h5)
+        ) {
 
-                    OutlinedTextField(
-                        value = nameState.value,
-                        onValueChange = { nameState.value = it },
-                        label = { Text("Nom de la tâche") },
-                        modifier = Modifier.fillMaxWidth()
-                    )
-
-                    OutlinedTextField(
-                        value = descriptionState.value,
-                        onValueChange = { descriptionState.value = it },
-                        label = { Text("Description") },
-                        modifier = Modifier.fillMaxWidth()
-                    )
-
-                    OutlinedTextField(
-                        value = dueDateState.value,
-                        onValueChange = { dueDateState.value = it },
-                        label = { Text("Date debut") },
-                        modifier = Modifier.fillMaxWidth()
-                    )
-                    OutlinedTextField(
-                        value = finDateState.value,
-                        onValueChange = { finDateState.value = it },
-                        label = { Text("Date d'échéance") },
-                        modifier = Modifier.fillMaxWidth()
-                    )
-
-
-                    OutlinedTextField(
-                        value = assignedMembersState.value,
-                        onValueChange = { assignedMembersState.value = it },
-                        label = { Text("Membres assignés") },
-                        modifier = Modifier.fillMaxWidth()
-                    )
-
-                    Button(
-                        onClick = {
-                            addTask()
-                        },
-                        modifier = Modifier
-                            .padding(vertical = 16.dp)
-                    ) {
-                        Text("Ajouter la tâche")
-                    }
-                }
-
-            }
+        Spacer(modifier = Modifier.padding(vertical=8.dp))
+        OutlinedTextField(
+            value = nameState.value,
+            modifier = Modifier.fillMaxWidth(),
+            shape= CutCornerShape(topStart = 15.dp, bottomEnd = 15.dp),
+            onValueChange = { newValue ->
+                nameState.value = newValue
+            },
+            label = { Text(text = " Name", color = Color(color = 0xFF1E88E5)) },
+            textStyle = TextStyle(
+                fontSize = 16.sp
+            ),
+            colors = TextFieldDefaults.outlinedTextFieldColors(
+                textColor = MaterialTheme.colors.onSurface,
+                focusedBorderColor = Color(color = 0xFF1E88E5),
+                cursorColor = MaterialTheme.colors.onSurface,
+            )
         )
+
+
+
+        Spacer(modifier = Modifier.padding(8.dp))
+
+        OutlinedTextField(
+            value = descriptionState.value,
+            modifier = Modifier.fillMaxWidth(),
+            onValueChange = { newValue ->
+                descriptionState.value = newValue
+            },
+            shape= CutCornerShape(topStart = 15.dp, bottomEnd = 15.dp),
+            label = { Text(text = "Description", color = Color(color = 0xFF1E88E5)) },
+            maxLines = 5,
+            textStyle = TextStyle(
+                fontSize = 16.sp
+            ),
+            keyboardOptions = KeyboardOptions.Default.copy(
+                keyboardType = KeyboardType.Text
+            ),
+            colors = TextFieldDefaults.outlinedTextFieldColors(
+                textColor = MaterialTheme.colors.onSurface,
+                focusedBorderColor = Color(color = 0xFF1E88E5),
+                cursorColor = MaterialTheme.colors.onSurface,
+            )
+        )
+
+        Spacer(modifier = Modifier.padding(8.dp))
+
+        OutlinedTextField(
+            value = dueDateState.value,
+            modifier = Modifier.fillMaxWidth(),
+            onValueChange = {   newValue ->
+                dueDateState.value = newValue
+            },
+            label = { Text(text = "Sub-Project Start", color = Color(color = 0xFF1E88E5)) },
+            readOnly = true,
+            trailingIcon = {
+                FloatingActionButton(onClick = { datePickerDialog.show() },
+                    modifier = Modifier.size(35.dp),
+                    backgroundColor = Color(color = 0xFF0088FF)
+                ) {
+                    Icon(Icons.Filled.DateRange, contentDescription = null)
+                }
+            },
+            singleLine = true,
+            maxLines = 1,
+            textStyle = TextStyle(
+                fontSize = 16.sp
+            ),
+
+
+            colors = TextFieldDefaults.outlinedTextFieldColors(
+                textColor = MaterialTheme.colors.onSurface,
+                focusedBorderColor = Color(color = 0xFF1E88E5),
+                cursorColor = MaterialTheme.colors.onSurface,
+                trailingIconColor = Color(color = 0xFFFFFFFF),
+            ),
+            shape= CutCornerShape(topStart = 15.dp, bottomEnd = 15.dp),
+        )
+        Spacer(modifier = Modifier.padding(8.dp))
+        OutlinedTextField(
+            value = finDateState.value,
+            modifier = Modifier.fillMaxWidth(),
+            onValueChange = {  },
+            label = { Text(text = "Sub-Project Deadline", color = Color(color = 0xFF1E88E5)) },
+            readOnly = true,
+            trailingIcon = {
+                FloatingActionButton(onClick = { datePickerDialog2.show() },
+                    modifier = Modifier.size(35.dp),
+                    backgroundColor = Color(color = 0xFF0088FF)
+                ) {
+                    Icon(Icons.Filled.DateRange, contentDescription = null)
+                }
+            },
+            singleLine = true,
+            maxLines = 1,
+            textStyle = TextStyle(
+                fontSize = 16.sp
+            ),
+            colors = TextFieldDefaults.outlinedTextFieldColors(
+                textColor = MaterialTheme.colors.onSurface,
+                focusedBorderColor = Color(color = 0xFF1E88E5),
+                cursorColor = MaterialTheme.colors.onSurface,
+                trailingIconColor = Color(color = 0xFFFFFFFF),
+            ),
+            shape= CutCornerShape(topStart = 15.dp, bottomEnd = 15.dp),
+        )
+
+        Spacer(modifier = Modifier.padding(8.dp))
+        Button(onClick = { addTask()}, colors = ButtonDefaults.buttonColors( backgroundColor = Color(color = 0xFF1E88E5)) ,
+            modifier = Modifier.align(Alignment.CenterHorizontally),
+            shape= CutCornerShape(topStart = 7.dp, bottomEnd = 7.dp),
+            contentPadding = PaddingValues(10.dp)
+        )
+        {
+            Text(text = "Ajouter la tâche", color = Color(color = 0xFFFFFFFF))
+
+        }
+        Spacer(modifier = Modifier.padding(8.dp))
     }
+
 }

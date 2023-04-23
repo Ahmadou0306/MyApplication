@@ -20,4 +20,6 @@ class MemberRepository(private val memberDao: MemberDao) {
         }
     }
 
+    fun getMemberById(id:Int)=memberDao.getMemberById(id)
+
 }

@@ -20,4 +20,7 @@ import kotlinx.coroutines.flow.Flow
 
    @Query("Delete From task WHERE id = :id")
     suspend fun delete(id: Int)
+
+    @Query("SELECT * FROM task WHERE idProject=:id")
+    fun getTasksByIdProject(id: Int):Flow<List<Task>>
 }

@@ -1,6 +1,7 @@
 
 package com.example.myapplication.projetmobile.ui.detailsProject
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -31,25 +32,33 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.myapplication.R
+import com.example.myapplication.projetmobile.dataSource.models.Project
 import com.example.myapplication.projetmobile.dataSource.models.Task
 import com.example.myapplication.projetmobile.ui.detailsProject.composable.AddMemberModal
 import com.example.myapplication.projetmobile.ui.detailsProject.composable.AddSubProjectModal
 import com.example.myapplication.projetmobile.ui.detailsProject.composable.AddTaskModal
+import com.example.myapplication.projetmobile.ui.detailsProject.composable.DiagramModal
+import com.example.myapplication.projetmobile.ui.detailsProject.composable.ListMemberModal
 import com.example.myapplication.projetmobile.ui.detailsProject.composable.MembersList
+import com.example.myapplication.projetmobile.ui.detailsProject.composable.SubProjectModal
+import com.example.myapplication.projetmobile.ui.detailsProject.composable.TaskModal
+import com.example.myapplication.projetmobile.ui.home.componant.BottomBar
+import com.example.myapplication.projetmobile.ui.home.componant.FloatingActionButtonComp
+import com.example.myapplication.projetmobile.ui.home.componant.drawerView
 import com.example.myapplication.projetmobile.viewsmodels.MemberViewModel
 import com.example.myapplication.projetmobile.viewsmodels.TaskViewModel
+import kotlinx.coroutines.flow.Flow
 
 const val colorPersonnel=0xFF1E88E5
 
 data class ActionButtonData(val icon: ImageVector, val text: String, val action: () -> Unit)
 
 @Composable
-fun ActionButton(buttonData: ActionButtonData, onNavigate: () -> Unit) {
+fun ActionButton(buttonData: ActionButtonData) {
     Box(
         contentAlignment = Alignment.Center,
         modifier = Modifier.clickable {
             buttonData.action()
-            onNavigate()
         }
     ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
@@ -79,19 +88,19 @@ fun ActionButton(buttonData: ActionButtonData, onNavigate: () -> Unit) {
         }
     }
 }
-
 @Composable
-fun ActionIcons(selectedId: Int, onNavigate: () -> Unit) {
+fun ActionIcons(selectedId: Int) {
 
 
     var showDialogMember = remember { mutableStateOf(false) }
     var showDialogSubProject = remember { mutableStateOf(false) }
     var showDialogTask = remember { mutableStateOf(false) }
+    var showDiagram = remember { mutableStateOf(false) }
     val buttonData = listOf(
         ActionButtonData(Icons.Default.Create, "Add Sous-projet") {showDialogSubProject.value=true},
         ActionButtonData(Icons.Default.Add, "Add tâche") {showDialogTask.value=true},
         ActionButtonData(Icons.Default.Person, "Ajouter Un Membre") { showDialogMember.value = true },
-        ActionButtonData(Icons.Default.Info, "Diagram") {}
+        ActionButtonData(Icons.Default.Info, "Diagram") { showDiagram.value=true }
     )
 
     LazyRow(
@@ -100,74 +109,86 @@ fun ActionIcons(selectedId: Int, onNavigate: () -> Unit) {
         modifier = Modifier.fillMaxWidth()
     ) {
         items(buttonData) { data ->
-            ActionButton(data,onNavigate={
-                when(data){
-                    buttonData[3]->onNavigate
-                    else->{}
-                }
-            })
+            ActionButton(data)
         }
     }
     AddMemberModal(showDialogMember,selectedId)
     AddSubProjectModal(showDialogSubProject, selectedId)
     AddTaskModal(showDialogTask , selectedId)
+    DiagramModal(showDiagram, selectedId)
 }
 
-@Composable
-fun ListMembers(){
-    val viewModel = viewModel(MemberViewModel::class.java)
-    MembersList(members = viewModel.memberList)
-}
 
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun DetailHome(
     selectedId: Int,
-    onNavigate: () -> Unit
+    onNavigateFloat: (Project?) -> Unit,
+    onHomeNavigate:()->Unit
 ) {
-    Surface {
-        Column {
-            Box{
-                Header()
-            }
-            Box {
-                ActionIcons(selectedId,onNavigate)
-            }
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 0.dp, horizontal = 16.dp)
-            ) {
-                Button(
-                    onClick = {},
-                    modifier = Modifier.fillMaxWidth(),
-                    colors = ButtonDefaults.buttonColors(backgroundColor = Color(colorPersonnel))
-                ) {
-                    Text(text = "Supprimer Le Projet", color = Color.White)
+    Scaffold(
+        // Pass the body in
+        // content parameter
+        content = {
+            Surface {
+                Column {
+                    Box{
+                        Header()
+                    }
+                    Box {
+                        ActionIcons(selectedId)
+                    }
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 0.dp, horizontal = 16.dp)
+                    ) {
+                        Button(
+                            onClick = {},
+                            modifier = Modifier.fillMaxWidth(),
+                            colors = ButtonDefaults.buttonColors(backgroundColor = Color(colorPersonnel))
+                        ) {
+                            Text(text = "Supprimer Le Projet", color = Color.White)
+                        }
+                    }
+                    Box {
+                        TroisCards()
+                    }
                 }
             }
-            Box {
-                TroisCards()
-            }
+        },
+        // pass the drawer
+        drawerContent = {
+        },
+        isFloatingActionButtonDocked = true,
+        floatingActionButton = {
+            // Create a floating action button in
+            // floatingActionButton parameter of scaffold
+                               FloatingActionButtonComp(onNavigate = onNavigateFloat)
+        },
 
-            Box {
-               ListMembers()
-            }
+        // pass the bottomBar
+        // we created
+        bottomBar = { BottomBar(onHomeNavigate) }
+    )
+}
 
-        }
-    }
-
-
-}@Composable
+@Composable
 fun TroisCards() {
+    var showListDialogMember = remember { mutableStateOf(false) }
+    var showListDialogTask = remember { mutableStateOf(false) }
+    var showListDialogSubProject = remember { mutableStateOf(false) }
+
     val cardPadding = 16.dp
     val cards = listOf(
-        R.drawable.dice_3,
-        R.drawable.dice_3,
-        R.drawable.dice_4
+        R.drawable.member,
+        R.drawable.tachejpg,
+        R.drawable.subproject
     )
 
     LazyRow(
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier
+            .fillMaxWidth()
     ) {
         itemsIndexed(cards) { index, card ->
             Box(
@@ -182,8 +203,8 @@ fun TroisCards() {
                     elevation = 4.dp,
                     modifier = Modifier
                         .width(300.dp)
-                        .height(250.dp)
-                        .padding(bottom = 16.dp)
+                        .height(290.dp)
+                        .padding(bottom = 16.dp, top = 5.dp)
                 ) {
                     Column(
                         Modifier
@@ -200,7 +221,15 @@ fun TroisCards() {
                                 .scale(0.5f)
                         )
                         Button(
-                            onClick = { /* Action à effectuer */ },
+                            onClick = {
+                                      /* Action à effectuer */
+                                      when(index){
+                                          0->showListDialogMember.value=true
+                                          1->showListDialogTask.value=true
+                                          2->showListDialogSubProject.value=true
+                                          else->{}
+                                      }
+                                      },
                             colors = ButtonDefaults.buttonColors(Color(colorPersonnel))
                         ) {
                             Text(when (index) {
@@ -209,6 +238,10 @@ fun TroisCards() {
                                 2 -> "Sous-project"
                                 else -> ""
                             })
+
+                            ListMemberModal(showListDialogMember)
+                            TaskModal(showListDialogTask)
+                            SubProjectModal(showListDialogSubProject)
                         }
                     }
                 }

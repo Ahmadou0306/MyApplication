@@ -12,19 +12,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.myapplication.projetmobile.NavRoute
 import com.example.myapplication.projetmobile.dataSource.models.Project
-import com.example.myapplication.projetmobile.ui.home.componant.Drawer
-import com.example.myapplication.projetmobile.ui.home.componant.Menu
+import com.example.myapplication.projetmobile.ui.home.componant.BottomBar
+import com.example.myapplication.projetmobile.ui.home.componant.FloatingActionButtonComp
 import com.example.myapplication.projetmobile.ui.home.componant.ProjectCard
 import com.example.myapplication.projetmobile.ui.home.componant.barNavigation
+import com.example.myapplication.projetmobile.ui.home.componant.drawerView
 import com.example.myapplication.projetmobile.viewsmodels.ProjectViewModel
 import kotlinx.coroutines.launch
 
 
 
 
-private const val colorPersonnel=0xFF1E88E5
 
 @Composable
 private fun ProjectsList(
@@ -43,7 +42,10 @@ private fun ProjectsList(
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
-fun Home(onNavigate: (Project?) -> Unit) {
+fun Home(
+    onNavigate: (Project?) -> Unit,
+    onHomeNavigate:()->Unit
+) {
 
     // create a scaffold state, set it to close by default
     val scaffoldState = rememberScaffoldState(rememberDrawerState(DrawerValue.Closed))
@@ -77,28 +79,18 @@ fun Home(onNavigate: (Project?) -> Unit) {
                   },
         // pass the drawer
         drawerContent = {
-            Drawer().drawerView()
+            drawerView()
         },
         isFloatingActionButtonDocked = true,
         floatingActionButton = {
             // Create a floating action button in
             // floatingActionButton parameter of scaffold
-            FloatingActionButton(
-                onClick = {
-                    onNavigate(null)
-                },
-                modifier = Modifier
-                    .border(2.dp,MaterialTheme.colors.secondary, CircleShape),
-                backgroundColor = Color(color = colorPersonnel)
-            ) {
-                // Simple Text inside FAB
-                Text(text = "+", color = Color.White)
-            }
+            FloatingActionButtonComp(onNavigate)
         },
 
         // pass the bottomBar
         // we created
-        bottomBar = { Menu().bottom_bar()}
+        bottomBar = { BottomBar(onHomeNavigate)}
 
     )
 }

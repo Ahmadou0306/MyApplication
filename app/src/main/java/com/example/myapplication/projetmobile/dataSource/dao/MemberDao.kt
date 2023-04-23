@@ -14,6 +14,9 @@ interface MemberDao {
     @Insert
     suspend fun insertMember( task: Member)
 
+    @Query("SELECT * FROM member WHERE id = :id")
+    fun getMemberById(id: Int): Flow<Member?>
+
     @Query("Delete From member WHERE id = :id")
     suspend fun deleteMember(id: Int)
 }

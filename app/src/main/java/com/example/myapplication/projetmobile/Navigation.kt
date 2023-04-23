@@ -30,13 +30,18 @@ fun NavHost() {
     ) {
         //ROUTE HOME
         composable(NavRoute.Home.route) {
-            Home(onNavigate = {project ->
+            Home(
+                onNavigate = {project ->
                 if(project==null){
                     navController.navigate(NavRoute.AddFormProject.route)
                 }else{
                     navController.navigate(NavRoute.DetailHome.route+"/${project.id}")
                 }
-            })
+            },
+               onHomeNavigate = {
+                   navController.navigateUp()
+               }
+            )
         }
 
         //REDIRECT DETAILS VIEW
@@ -45,20 +50,42 @@ fun NavHost() {
             NavRoute.DetailHome.route+"/{id}",
             arguments = listOf(navArgument("id") { type = NavType.IntType })
             ){backStackEntry->
-            DetailHome(selectedId = backStackEntry.arguments?.getInt("id")?:1) {
+            DetailHome(
+                selectedId = backStackEntry.arguments?.getInt("id")?:1,
+                onNavigateFloat = { project ->
+                    if(project==null){
+                        navController.navigate(NavRoute.AddFormProject.route)
+                    }
+                },
+                onHomeNavigate = {
+                    navController.navigateUp()
+                }
 
-
-            }
+            )
         }
 
-
+        composable(
+            NavRoute.TasksChart.route+"/{id}",
+            arguments = listOf(navArgument("id") { type = NavType.IntType })
+        ){backStackEntry->
+            TasksChart(id=backStackEntry.arguments?.getInt("id")?:1 )
+        }
 
         //REDIRECT FORM ADD PROJECT
 
        composable(NavRoute.AddFormProject.route){
-           AddFormProject {
+           AddFormProject(onFormNavigate =  {
                navController.navigate(NavRoute.AddFormProject.route)
+           }, onNavigate = {project ->
+               if(project==null){
+                   navController.navigate(NavRoute.AddFormProject.route)
+               }
+           },
+           onHomeNavigate = {
+               navController.navigateUp()
            }
+
+           )
        }
 
 

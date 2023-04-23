@@ -30,8 +30,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModel
 
 
-class Drawer: ViewModel() {
-    private val colorPersonnel =0xFF1E88E5
+    private const val colorPersonnel =0xFF1E88E5
 
      @Composable
      fun drawerView() {
@@ -46,6 +45,8 @@ class Drawer: ViewModel() {
          }
 
      }
+
+
     @Composable
     fun drawerViewUser() {
         Row(
@@ -160,7 +161,6 @@ class Drawer: ViewModel() {
             }
         }
 
-}
 
 
 
