@@ -129,6 +129,8 @@ fun SubProjectForm(showDialog:MutableState<Boolean>,selectedId:Int){
     fun initValue(){
         name=""
         description=""
+        dateEnd.value=""
+        dateStart.value=""
     }
     fun addSubProject(){
         val subProject=SousProject(

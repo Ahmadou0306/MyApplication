@@ -215,7 +215,7 @@ fun taskContain(task : Task) {
                     modifier = Modifier.size(20.dp)
                 )
                 Text(
-                    text = "assigné(s) Membre: ",
+                    text = "assigné Membre(s) ",
                     fontSize = 14.sp,
                     color = MaterialTheme.colors.onSurface.copy(alpha = 0.5f),
                     modifier = Modifier.padding(start = 8.dp)

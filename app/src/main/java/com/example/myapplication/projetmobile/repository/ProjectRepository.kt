@@ -17,5 +17,7 @@ class ProjectRepository(private val projectDao: ProjectDao) {
             projectDao.deleteProject(project.id)
         }
     }
+    fun getProjectById(id:Int)=projectDao.getProjectById(id)
+
 
 }

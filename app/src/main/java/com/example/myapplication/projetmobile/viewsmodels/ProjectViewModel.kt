@@ -7,9 +7,12 @@ import com.example.myapplication.projetmobile.dataSource.models.Member
 import com.example.myapplication.projetmobile.dataSource.models.Project
 import com.example.myapplication.projetmobile.repository.MemberRepository
 import com.example.myapplication.projetmobile.repository.ProjectRepository
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
 
 
@@ -34,6 +37,12 @@ class ProjectViewModel(private val projectDataSource: ProjectRepository = Graph.
     }
     fun deleteProject(project: Project) = viewModelScope.launch {
         projectDataSource.deleteProject(project)
+    }
+    fun getProjectById(id: Int): Flow<Project?> = projectDataSource.getProjectById(id).flatMapLatest { project ->
+        val states = _state.value.copy(memberSelected = project != null)
+        _state.value = states
+        memberSelected.value = project != null
+        flowOf(project)
     }
     data class ProjectViewState(
         val projectList: List<Project> = emptyList(),

@@ -3,6 +3,7 @@ package com.example.myapplication.projetmobile.dataSource.dao
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
+import com.example.myapplication.projetmobile.dataSource.models.Member
 import com.example.myapplication.projetmobile.dataSource.models.Project
 import kotlinx.coroutines.flow.Flow
 
@@ -18,4 +19,7 @@ interface ProjectDao {
 
     @Query("Delete From project WHERE id = :id")
     suspend fun deleteProject(id: Int)
+
+    @Query("SELECT * FROM project WHERE id = :id")
+    fun getProjectById(id: Int): Flow<Project?>
 }

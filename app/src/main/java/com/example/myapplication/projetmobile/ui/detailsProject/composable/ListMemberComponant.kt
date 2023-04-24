@@ -92,11 +92,8 @@ fun container(member:Member){
 @Composable
 fun ListMembersProject(members: List<Member>) {
     LazyColumn(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color.White)
-        ,
-        contentPadding = PaddingValues(16.dp)
+        modifier = Modifier.background(color = Color.LightGray),
+        contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
     ) {
         items(members) { member ->
            container(member)

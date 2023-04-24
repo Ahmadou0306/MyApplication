@@ -72,6 +72,7 @@ fun ScaffoldContain(onFormNavigate: () -> Unit){
 
     var description = remember { mutableStateOf(TextFieldValue()) }
     var name = remember { mutableStateOf(TextFieldValue()) }
+    var chefName = remember { mutableStateOf(TextFieldValue()) }
     val dateStart = remember { mutableStateOf("") }
     val dateEnd = remember { mutableStateOf("") }
 
@@ -90,11 +91,16 @@ fun ScaffoldContain(onFormNavigate: () -> Unit){
     fun initialForm(){
         description.value= TextFieldValue("")
         name.value= TextFieldValue("")
+        chefName.value=TextFieldValue("")
+        description.value=TextFieldValue("")
+        dateEnd.value=""
+        dateStart.value=""
     }
     fun addProject(){
         val project=Project(
             0,
             name.value.text,
+            chefName.value.text,
             description.value.text,
             dateStart.value,
             dateEnd.value
@@ -123,6 +129,24 @@ fun ScaffoldContain(onFormNavigate: () -> Unit){
             )
         )
 
+        Spacer(modifier = Modifier.padding(8.dp))
+        OutlinedTextField(
+            value = chefName.value,
+            modifier = Modifier.fillMaxWidth(),
+            shape= CutCornerShape(topStart = 15.dp, bottomEnd = 15.dp),
+            onValueChange = {
+                chefName.value = it
+            },
+            label = { Text(text = "Project Name", color = Color(color = 0xFF1E88E5)) },
+            textStyle = TextStyle(
+                fontSize = 16.sp
+            ),
+            colors = TextFieldDefaults.outlinedTextFieldColors(
+                textColor = MaterialTheme.colors.onSurface,
+                focusedBorderColor = Color(color = 0xFF1E88E5),
+                cursorColor = MaterialTheme.colors.onSurface,
+            )
+        )
         Spacer(modifier = Modifier.padding(8.dp))
 
         OutlinedTextField(

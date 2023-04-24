@@ -1,23 +1,15 @@
 package com.example.myapplication.projetmobile.ui.detailsProject.composable
 
-import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Info
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.*
-import androidx.compose.ui.graphics.Color.Companion.Gray
-import androidx.compose.ui.layout.*
-import androidx.compose.ui.platform.*
-import androidx.compose.ui.text.*
 import androidx.compose.ui.text.font.*
-import androidx.compose.ui.text.style.*
 import androidx.compose.ui.unit.*
 import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -98,27 +90,6 @@ fun SubProjectContain(subProject: SousProject) {
                         text = subProject.dueDateFin,
                         style = MaterialTheme.typography.body2,
                         modifier = Modifier.padding(bottom = 8.dp)
-                    )
-                }
-            }
-            Divider()
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.End,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                TextButton(
-                    onClick = { /* Ajouter ici le code pour afficher les détails du sous-projet */ },
-                    colors = ButtonDefaults.textButtonColors(
-                        backgroundColor = Color(colorPersonnel),
-                        contentColor = MaterialTheme.colors.onPrimary
-                    ),
-                    shape = RoundedCornerShape(1.dp),
-                    modifier = Modifier.padding(top = 8.dp)
-                ) {
-                    Text(
-                        text = "Détails",
-                        fontWeight = FontWeight.Bold
                     )
                 }
             }

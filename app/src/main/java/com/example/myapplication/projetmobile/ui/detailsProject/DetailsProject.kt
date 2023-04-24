@@ -25,11 +25,13 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.myapplication.R
 import com.example.myapplication.projetmobile.dataSource.models.Project
@@ -39,15 +41,13 @@ import com.example.myapplication.projetmobile.ui.detailsProject.composable.AddSu
 import com.example.myapplication.projetmobile.ui.detailsProject.composable.AddTaskModal
 import com.example.myapplication.projetmobile.ui.detailsProject.composable.DiagramModal
 import com.example.myapplication.projetmobile.ui.detailsProject.composable.ListMemberModal
-import com.example.myapplication.projetmobile.ui.detailsProject.composable.MembersList
 import com.example.myapplication.projetmobile.ui.detailsProject.composable.SubProjectModal
 import com.example.myapplication.projetmobile.ui.detailsProject.composable.TaskModal
 import com.example.myapplication.projetmobile.ui.home.componant.BottomBar
 import com.example.myapplication.projetmobile.ui.home.componant.FloatingActionButtonComp
-import com.example.myapplication.projetmobile.ui.home.componant.drawerView
-import com.example.myapplication.projetmobile.viewsmodels.MemberViewModel
+import com.example.myapplication.projetmobile.viewsmodels.ProjectViewModel
 import com.example.myapplication.projetmobile.viewsmodels.TaskViewModel
-import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.launch
 
 const val colorPersonnel=0xFF1E88E5
 
@@ -133,7 +133,7 @@ fun DetailHome(
             Surface {
                 Column {
                     Box{
-                        Header()
+                        Header(selectedId)
                     }
                     Box {
                         ActionIcons(selectedId)
@@ -249,8 +249,25 @@ fun TroisCards() {
         }
     }
 }
+@SuppressLint("CoroutineCreationDuringComposition")
 @Composable
-fun Header(){
+fun getProjectById(id: Int): Project {
+    val viewModelMember = viewModel(ProjectViewModel::class.java)
+    var project: Project? = null
+    val lifecycleOwner = LocalLifecycleOwner.current
+    lifecycleOwner.lifecycleScope.launch {
+        viewModelMember.getProjectById(id).collect {
+            project = it
+        }
+    }
+    return project!!
+}
+@Composable
+fun Header(id:Int){
+    val viewModelMember = viewModel(ProjectViewModel::class.java)
+    viewModelMember.getProjectById(id).collect{
+        project->
+    }
     Surface(
         color = Color(colorPersonnel),
         modifier = Modifier
@@ -272,7 +289,7 @@ fun Header(){
         ) {
             // Créer un Text pour le titre du projet
             Text(
-                text = "Titre du projet",
+                text = "${getProjectById(1).name}",
                 fontSize = 25.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color.White,
@@ -282,7 +299,7 @@ fun Header(){
 
             // Créer un Text pour le nom du chef de projet
             Text(
-                text = "Chef de project:  Nom",
+                text = "Chef de project:  ${getProjectById(1)}",
                 fontSize = 16.sp,
                 color = Color.White,
                 textAlign = TextAlign.Center,

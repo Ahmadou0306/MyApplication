@@ -14,7 +14,7 @@ import com.example.myapplication.projetmobile.dataSource.models.SousProject
 import com.example.myapplication.projetmobile.dataSource.models.Task
 import com.example.myapplication.projetmobile.dataSource.models.TaskToMember
 
-@Database(entities = [Task::class, Member::class, Project::class,SousProject::class,TaskToMember::class], version = 10, exportSchema = false)
+@Database(entities = [Task::class, Member::class, Project::class,SousProject::class,TaskToMember::class], version = 11, exportSchema = false)
 abstract class ProjectDataBase : RoomDatabase() {
     abstract fun taskDao(): TaskDao
     abstract fun memberDao(): MemberDao
