@@ -3,6 +3,7 @@ package com.example.myapplication.projetmobile.viewsmodels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.myapplication.projetmobile.Graph
+import com.example.myapplication.projetmobile.dataSource.ProjectDataBase
 import com.example.myapplication.projetmobile.dataSource.models.Member
 import com.example.myapplication.projetmobile.dataSource.models.Project
 import com.example.myapplication.projetmobile.repository.MemberRepository
@@ -38,12 +39,10 @@ class ProjectViewModel(private val projectDataSource: ProjectRepository = Graph.
     fun deleteProject(project: Project) = viewModelScope.launch {
         projectDataSource.deleteProject(project)
     }
-    fun getProjectById(id: Int): Flow<Project?> = projectDataSource.getProjectById(id).flatMapLatest { project ->
-        val states = _state.value.copy(memberSelected = project != null)
-        _state.value = states
-        memberSelected.value = project != null
-        flowOf(project)
+    fun getProjectById(id: Int): Flow<Project?> {
+        return projectDataSource.getProjectById(id)
     }
+
     data class ProjectViewState(
         val projectList: List<Project> = emptyList(),
         val memberSelected: Boolean = false,

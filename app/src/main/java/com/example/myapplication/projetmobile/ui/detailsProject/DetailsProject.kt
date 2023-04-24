@@ -17,6 +17,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -31,6 +32,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.LifecycleCoroutineScope
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.myapplication.R
@@ -47,6 +50,9 @@ import com.example.myapplication.projetmobile.ui.home.componant.BottomBar
 import com.example.myapplication.projetmobile.ui.home.componant.FloatingActionButtonComp
 import com.example.myapplication.projetmobile.viewsmodels.ProjectViewModel
 import com.example.myapplication.projetmobile.viewsmodels.TaskViewModel
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 const val colorPersonnel=0xFF1E88E5
@@ -265,9 +271,15 @@ fun getProjectById(id: Int): Project {
 @Composable
 fun Header(id:Int){
     val viewModelMember = viewModel(ProjectViewModel::class.java)
-    viewModelMember.getProjectById(id).collect{
-        project->
+    var projectStateName = remember { mutableStateOf<Project?>(null) }
+
+    LaunchedEffect(key1 = id) {
+        viewModelMember.getProjectById(id).collect { project ->
+            projectStateName.value = project
+        }
     }
+
+
     Surface(
         color = Color(colorPersonnel),
         modifier = Modifier
@@ -289,7 +301,7 @@ fun Header(id:Int){
         ) {
             // Créer un Text pour le titre du projet
             Text(
-                text = "${getProjectById(1).name}",
+                text = "${projectStateName.value?.name}",
                 fontSize = 25.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color.White,
@@ -299,7 +311,7 @@ fun Header(id:Int){
 
             // Créer un Text pour le nom du chef de projet
             Text(
-                text = "Chef de project:  ${getProjectById(1)}",
+                text = "Chef de project:  ${projectStateName.value?.chefName}",
                 fontSize = 16.sp,
                 color = Color.White,
                 textAlign = TextAlign.Center,
