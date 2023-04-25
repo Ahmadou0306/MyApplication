@@ -132,6 +132,7 @@ fun DetailHome(
     onNavigateFloat: (Project?) -> Unit,
     onHomeNavigate:()->Unit
 ) {
+    val viewModelMember = viewModel(ProjectViewModel::class.java)
     Scaffold(
         // Pass the body in
         // content parameter

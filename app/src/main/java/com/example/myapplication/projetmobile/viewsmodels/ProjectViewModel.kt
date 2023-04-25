@@ -3,17 +3,12 @@ package com.example.myapplication.projetmobile.viewsmodels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.myapplication.projetmobile.Graph
-import com.example.myapplication.projetmobile.dataSource.ProjectDataBase
-import com.example.myapplication.projetmobile.dataSource.models.Member
 import com.example.myapplication.projetmobile.dataSource.models.Project
-import com.example.myapplication.projetmobile.repository.MemberRepository
 import com.example.myapplication.projetmobile.repository.ProjectRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
 
 
