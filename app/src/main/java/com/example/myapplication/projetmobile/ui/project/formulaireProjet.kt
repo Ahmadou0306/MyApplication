@@ -79,13 +79,13 @@ fun ScaffoldContain(onFormNavigate: () -> Unit){
     val datePickerDialog = DatePickerDialog(
         context,
         { _: DatePicker, year: Int, month: Int, dayOfMonth: Int ->
-            dateStart.value = "$dayOfMonth/$month/$year"
+            dateStart.value = "$year-$month-$dayOfMonth"
         }, year, month, day
     )
     val datePickerDialog2 = DatePickerDialog(
         context,
         { _: DatePicker, year: Int, month: Int, dayOfMonth: Int ->
-            dateEnd.value = "$dayOfMonth/$month/$year"
+            dateEnd.value = "$year-$month-$dayOfMonth"
         }, year, month, day
     )
     fun initialForm(){
@@ -137,7 +137,7 @@ fun ScaffoldContain(onFormNavigate: () -> Unit){
             onValueChange = {
                 chefName.value = it
             },
-            label = { Text(text = "Project Name", color = Color(color = 0xFF1E88E5)) },
+            label = { Text(text = "Project Manager", color = Color(color = 0xFF1E88E5)) },
             textStyle = TextStyle(
                 fontSize = 16.sp
             ),
