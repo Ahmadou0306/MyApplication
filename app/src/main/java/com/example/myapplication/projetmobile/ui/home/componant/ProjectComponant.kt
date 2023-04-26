@@ -27,6 +27,7 @@ import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -36,7 +37,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.myapplication.projetmobile.dataSource.models.Notification
 import com.example.myapplication.projetmobile.dataSource.models.Project
+import com.example.myapplication.projetmobile.viewsmodels.NotificationViewModel
+import com.example.myapplication.projetmobile.viewsmodels.ProjectViewModel
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 private const val colorPersonnel=0xFF1E88E5
 
@@ -50,7 +57,7 @@ private const val colorPersonnel=0xFF1E88E5
 
     Card(
         modifier = Modifier
-            .padding(vertical =20.dp, horizontal = 5.dp)
+            .padding(vertical = 20.dp, horizontal = 5.dp)
             .fillMaxWidth()
             .clickable { isExpanded = !isExpanded },
         elevation = 10.dp,
@@ -86,7 +93,7 @@ private const val colorPersonnel=0xFF1E88E5
                         color = MaterialTheme.colors.onSurface
                     )
                     Text(
-                        text = "Status : En cour",
+                        text = "Status : ${stateProject(project)}",
                         style = MaterialTheme.typography.caption,
                         color = MaterialTheme.colors.onSurface
                     )
@@ -114,4 +121,13 @@ private const val colorPersonnel=0xFF1E88E5
             }
         }
     }
+}
+
+@Composable
+fun stateProject(project: Project): String {
+    val inputFormatter = DateTimeFormatter.ofPattern("yyyy-M-d")
+    val outputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+    val today = LocalDate.now().format(outputFormatter)
+    val projectDate = LocalDate.parse(project.dueDateFin, inputFormatter)
+    return  if (projectDate.format(outputFormatter) == today) " Terminer" else "En cour"
 }
