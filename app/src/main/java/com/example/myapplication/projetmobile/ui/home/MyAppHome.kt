@@ -13,6 +13,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.myapplication.projetmobile.dataSource.models.Project
+import com.example.myapplication.projetmobile.ui.componant.EmptyContentListProject
 import com.example.myapplication.projetmobile.ui.home.componant.BottomBar
 import com.example.myapplication.projetmobile.ui.home.componant.FloatingActionButtonComp
 import com.example.myapplication.projetmobile.ui.home.componant.ProjectCard
@@ -32,10 +33,16 @@ private fun ProjectsList(
     val viewModel = viewModel(ProjectViewModel::class.java)
     val state by viewModel.state.collectAsState()
     LazyColumn {
-        items(state.projectList) { project ->
-            ProjectCard(project = project,
-                        onNavigation ={onNavigate(it)},
+        if(state.projectList.isNotEmpty()){
+            items(state.projectList) { project ->
+                ProjectCard(project = project,
+                    onNavigation ={onNavigate(it)},
                 )
+            }
+        }else{
+            item {
+                EmptyContentListProject()
+            }
         }
     }
 }

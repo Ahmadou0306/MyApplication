@@ -22,8 +22,8 @@ import java.time.format.DateTimeFormatter
 //@RequiresApi(Build.VERSION_CODES.O)
 @SuppressLint("NewApi")
 //private val today = LocalDate.now()
-private val daysOfWeek = listOf("Dim", "Lun", "Mar", "Mer", "Jeu", "Ven", "Sam")
-private val months = listOf("Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre")
+val daysOfWeek = listOf("Dim", "Lun", "Mar", "Mer", "Jeu", "Ven", "Sam")
+val months = listOf("Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre")
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable fun Calendar(

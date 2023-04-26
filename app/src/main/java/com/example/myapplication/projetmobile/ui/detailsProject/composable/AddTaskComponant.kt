@@ -113,19 +113,6 @@ fun AddTaskModal(showDialog: MutableState<Boolean>, selectedId:Int){
         )
     }
 }
-@SuppressLint("CoroutineCreationDuringComposition")
-@Composable
-fun getMemberById(id: Int): Member {
-    val viewModelMember = viewModel(MemberViewModel::class.java)
-    var member: Member? = null
-    val lifecycleOwner = LocalLifecycleOwner.current
-    lifecycleOwner.lifecycleScope.launch {
-        viewModelMember.getMemberById(id).collect {
-            member = it
-        }
-    }
-    return member!!
-}
 
 @Composable
 fun AddTaskForm(showDialog: MutableState<Boolean>, selectedId:Int){

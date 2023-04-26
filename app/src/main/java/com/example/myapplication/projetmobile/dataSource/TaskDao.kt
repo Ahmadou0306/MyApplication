@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
+import androidx.room.Update
 import com.example.myapplication.projetmobile.dataSource.models.Task
 import kotlinx.coroutines.flow.Flow
 
@@ -17,6 +18,9 @@ import kotlinx.coroutines.flow.Flow
 
     @Insert
     suspend fun insert( task: Task)
+
+    @Update
+    suspend fun update(task:Task)
 
    @Query("Delete From task WHERE id = :id")
     suspend fun delete(id: Int)

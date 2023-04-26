@@ -190,6 +190,7 @@ fun TasksChart(id:Int) {
         }
     }
 }
+
 @Composable
 fun DiagramModal(showDialog: MutableState<Boolean>,selectedId:Int){
     // Modal

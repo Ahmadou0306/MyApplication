@@ -2,6 +2,7 @@
 package com.example.myapplication.projetmobile.ui.detailsProject
 
 import android.annotation.SuppressLint
+import android.transition.CircularPropagation
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -18,8 +19,10 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -32,8 +35,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.LifecycleCoroutineScope
-import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.myapplication.R
@@ -50,9 +51,6 @@ import com.example.myapplication.projetmobile.ui.home.componant.BottomBar
 import com.example.myapplication.projetmobile.ui.home.componant.FloatingActionButtonComp
 import com.example.myapplication.projetmobile.viewsmodels.ProjectViewModel
 import com.example.myapplication.projetmobile.viewsmodels.TaskViewModel
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 const val colorPersonnel=0xFF1E88E5
@@ -132,7 +130,45 @@ fun DetailHome(
     onNavigateFloat: (Project?) -> Unit,
     onHomeNavigate:()->Unit
 ) {
-    val viewModelMember = viewModel(ProjectViewModel::class.java)
+    var showDialog by remember { mutableStateOf(false) }
+    val viewModelProject = viewModel(ProjectViewModel::class.java)
+    var projectExtract by remember {
+        mutableStateOf<Project?>(null)
+    }
+    LaunchedEffect(key1 = selectedId) {
+        viewModelProject.getProjectById(selectedId).collect { project ->
+            projectExtract=project
+        }
+    }
+    if (showDialog) {
+        AlertDialog(
+            onDismissRequest = { showDialog = false },
+            title = { Text("Confirmation") },
+            text = { Text("Êtes-vous sûr de vouloir supprimer ce projet?") },
+            confirmButton = {
+                Button(
+                    onClick = {
+                        viewModelProject.deleteProject(projectExtract)
+                        onHomeNavigate()
+                        CircularPropagation()
+                        showDialog = false
+                    },
+                    colors = ButtonDefaults.buttonColors(backgroundColor = Color(colorPersonnel))
+                ) {
+                    Text("Oui", color = Color.White)
+                }
+            },
+            dismissButton = {
+                Button(
+                    onClick = { showDialog = false },
+                    colors = ButtonDefaults.buttonColors(backgroundColor = Color(colorPersonnel)),
+
+                ) {
+                    Text("Non", color = Color.White)
+                }
+            }
+        )
+    }
     Scaffold(
         // Pass the body in
         // content parameter
@@ -151,7 +187,9 @@ fun DetailHome(
                             .padding(vertical = 0.dp, horizontal = 16.dp)
                     ) {
                         Button(
-                            onClick = {},
+                            onClick = {
+                                showDialog=true
+                                      },
                             modifier = Modifier.fillMaxWidth(),
                             colors = ButtonDefaults.buttonColors(backgroundColor = Color(colorPersonnel))
                         ) {

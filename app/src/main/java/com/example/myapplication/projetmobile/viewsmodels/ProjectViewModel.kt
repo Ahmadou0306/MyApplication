@@ -31,8 +31,10 @@ class ProjectViewModel(private val projectDataSource: ProjectRepository = Graph.
     fun addProject(project: Project) = viewModelScope.launch {
         projectDataSource.addProject(project = project)
     }
-    fun deleteProject(project: Project) = viewModelScope.launch {
-        projectDataSource.deleteProject(project)
+    fun deleteProject(project: Project?) = viewModelScope.launch {
+        if (project != null) {
+            projectDataSource.deleteProject(project)
+        }
     }
     fun getProjectById(id: Int): Flow<Project?> {
         return projectDataSource.getProjectById(id)

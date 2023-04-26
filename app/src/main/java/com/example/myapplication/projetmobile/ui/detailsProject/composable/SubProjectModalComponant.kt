@@ -1,11 +1,16 @@
 package com.example.myapplication.projetmobile.ui.detailsProject.composable
 
+import android.transition.CircularPropagation
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.graphics.*
@@ -14,8 +19,11 @@ import androidx.compose.ui.unit.*
 import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.myapplication.projetmobile.dataSource.models.SousProject
+import com.example.myapplication.projetmobile.ui.componant.EmptyContentListProject
 import com.example.myapplication.projetmobile.ui.detailsProject.colorPersonnel
+import com.example.myapplication.projetmobile.viewsmodels.MemberViewModel
 import com.example.myapplication.projetmobile.viewsmodels.SubProjectViewModel
+import com.example.myapplication.projetmobile.viewsmodels.TaskViewModel
 
 @Composable
 fun ShowSubProjects() {
@@ -24,14 +32,23 @@ fun ShowSubProjects() {
     LazyColumn(
         modifier = Modifier.padding(vertical = 8.dp, horizontal = 16.dp)
     ) {
-        items(state.subProjectList) { subProject ->
-           SubProjectContain(subProject)
+        if(state.subProjectList.isNotEmpty()){
+            items(state.subProjectList) { subProject ->
+                SubProjectContainer(subProject)
             }
+        }else{
+          item {
+              EmptyContentListProject()
+          }
         }
-    }
+        }
 
+    }
 @Composable
-fun SubProjectContain(subProject: SousProject) {
+fun SubProjectContainer(subProject: SousProject) {
+    var showDialogConfirmation by remember { mutableStateOf(false) }
+    val viewModel = viewModel(SubProjectViewModel::class.java)
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -46,14 +63,15 @@ fun SubProjectContain(subProject: SousProject) {
                 text = subProject.name,
                 style = MaterialTheme.typography.h6,
                 fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(bottom = 4.dp)
+                color = MaterialTheme.colors.primary,
+                modifier = Modifier.padding(bottom = 8.dp)
             )
             Text(
                 text = subProject.description,
                 style = MaterialTheme.typography.body1,
                 modifier = Modifier.padding(bottom = 16.dp)
             )
-            Divider()
+            Divider(color = MaterialTheme.colors.onBackground.copy(alpha = 0.2f))
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
@@ -66,13 +84,13 @@ fun SubProjectContain(subProject: SousProject) {
                     Text(
                         text = "Date de début",
                         style = MaterialTheme.typography.caption,
-                        fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colors.onBackground.copy(alpha = 0.8f),
                         modifier = Modifier.padding(bottom = 4.dp)
                     )
                     Text(
                         text = subProject.dueDate,
                         style = MaterialTheme.typography.body2,
+                        fontWeight = FontWeight.Bold,
                         modifier = Modifier.padding(bottom = 8.dp)
                     )
                 }
@@ -82,20 +100,58 @@ fun SubProjectContain(subProject: SousProject) {
                     Text(
                         text = "Date de fin",
                         style = MaterialTheme.typography.caption,
-                        fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colors.onBackground.copy(alpha = 0.8f),
                         modifier = Modifier.padding(bottom = 4.dp)
                     )
                     Text(
                         text = subProject.dueDateFin,
                         style = MaterialTheme.typography.body2,
+                        fontWeight = FontWeight.Bold,
                         modifier = Modifier.padding(bottom = 8.dp)
                     )
                 }
+                IconButton(
+                    onClick = {
+                              /* Delete action */
+                              showDialogConfirmation=true
+                              },
+                    content = { Icon(Icons.Filled.Delete, contentDescription = "DELETE") }
+                )
             }
+            // icon ajout tache
         }
     }
+    if (showDialogConfirmation) {
+        AlertDialog(
+            onDismissRequest = { showDialogConfirmation = false },
+            title = { Text("Confirmation") },
+            text = { Text("Êtes-vous sûr de vouloir supprimer ce Sous Project?") },
+            confirmButton = {
+                Button(
+                    onClick = {
+                        viewModel.deleteSubProject(subProject)
+                        CircularPropagation()
+                        showDialogConfirmation=false
+                    },
+                    colors = ButtonDefaults.buttonColors(backgroundColor = Color(colorPersonnel))
+                ) {
+                    Text("Oui", color = Color.White)
+                }
+            },
+            dismissButton = {
+                Button(
+                    onClick = { showDialogConfirmation = false },
+                    colors = ButtonDefaults.buttonColors(backgroundColor = Color(colorPersonnel)),
+
+                    ) {
+                    Text("Non", color = Color.White)
+                }
+            }
+        )
+    }
+
 }
+
 @Composable
 fun SubProjectModal(showDialog: MutableState<Boolean>){
     // Modal

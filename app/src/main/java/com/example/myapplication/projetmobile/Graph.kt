@@ -3,6 +3,7 @@ package com.example.myapplication.projetmobile
 import android.content.Context
 import com.example.myapplication.projetmobile.dataSource.ProjectDataBase
 import com.example.myapplication.projetmobile.repository.MemberRepository
+import com.example.myapplication.projetmobile.repository.NotificationRepository
 import com.example.myapplication.projetmobile.repository.ProjectRepository
 import com.example.myapplication.projetmobile.repository.SubProjectRepository
 import com.example.myapplication.projetmobile.repository.TaskRepository
@@ -23,6 +24,9 @@ object Graph {
 
     val TaskToMemberRepo by lazy {
         TaskToMemberRepository(dataBase.subTaskToMember())
+    }
+    val NotificationRepo by lazy {
+        NotificationRepository(dataBase.notification())
     }
 
     val subProjectRepo by lazy {

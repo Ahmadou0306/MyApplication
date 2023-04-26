@@ -1,4 +1,6 @@
 package com.example.myapplication.projetmobile.ui.detailsProject.composable
+import android.annotation.SuppressLint
+import android.transition.CircularPropagation
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.*
@@ -24,6 +26,7 @@ import androidx.compose.material.Button
 import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
+import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -33,6 +36,7 @@ import androidx.compose.ui.unit.dp
 import com.example.myapplication.R
 import com.example.myapplication.projetmobile.dataSource.models.Member
 import com.example.myapplication.projetmobile.dataSource.models.TaskToMember
+import com.example.myapplication.projetmobile.ui.componant.EmptyContentListProject
 import com.example.myapplication.projetmobile.viewsmodels.TaskToMemberViewModel
 
 
@@ -44,8 +48,14 @@ fun ListTasks() {
         modifier = Modifier.background(color = Color.LightGray),
         contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
     ) {
+        if(state.taskList.isNotEmpty()){
         items(state.taskList) { task ->
             taskContain(task)
+        }
+        }else{
+            item {
+                EmptyContentListProject()
+            }
         }
     }
 }
@@ -59,6 +69,7 @@ fun ListMember(id: Int) {
         modifier = Modifier.background(color = Color.LightGray),
         contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
     ) {
+
         items(state.memberList) { member ->
             MemberCard(member,id)
         }
@@ -116,10 +127,34 @@ fun MemberCard(member: Member, id: Int) {
     }
 }
 
+@SuppressLint("SuspiciousIndentation")
 @Composable
 fun taskContain(task : Task) {
     var showDialog = remember { mutableStateOf(false) }
+    var showDialogConfirmation by remember { mutableStateOf(false) }
+    val viewModel = viewModel(TaskViewModel::class.java)
+    var isExpanded by remember { mutableStateOf(false) }
+    var isChecked by remember { mutableStateOf(task.isCompleted) }
 
+
+fun updateState():Task= Task(
+    task.id,
+    task.idProject,
+    task.name,
+    task.description,
+    task.dueDate,
+    task.finDate,
+    true
+)
+    fun updateInitialState():Task= Task(
+        task.id,
+        task.idProject,
+        task.name,
+        task.description,
+        task.dueDate,
+        task.finDate,
+        false
+    )
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -136,13 +171,15 @@ fun taskContain(task : Task) {
                 modifier = Modifier.padding(8.dp)
             ) {
                 Checkbox(
-                    checked = true,
+                    checked = isChecked,
                     onCheckedChange = {
                                       /* TODO: handle checked state */
-
+                                      isChecked=!isChecked
+                                        if(isChecked) viewModel.update(updateState())
+                                        else viewModel.update(updateInitialState())
                                       },
                     colors = CheckboxDefaults.colors(
-                        checkedColor = Color.Green,
+                        checkedColor = Color(colorPersonnel),
                         uncheckedColor = Color(colorPersonnel)
                     ),
                     modifier = Modifier.padding(end = 16.dp)
@@ -154,7 +191,10 @@ fun taskContain(task : Task) {
                     modifier = Modifier.weight(1f)
                 )
                 IconButton(
-                    onClick = { /* TODO: handle delete action */ },
+                    onClick = {
+                              /* TODO: handle delete action */
+                              showDialogConfirmation=true
+                              },
                     modifier = Modifier.size(24.dp)
                 ) {
                     Icon(
@@ -215,16 +255,66 @@ fun taskContain(task : Task) {
                     modifier = Modifier.size(20.dp)
                 )
                 Text(
-                    text = "assigné Membre(s) ",
+                    text = "assigné des Membres ",
                     fontSize = 14.sp,
                     color = MaterialTheme.colors.onSurface.copy(alpha = 0.5f),
                     modifier = Modifier.padding(start = 8.dp)
                 )
             }
+            Column(
+                modifier = Modifier
+                    .padding(horizontal = 16.dp, vertical = 8.dp)
+                    .clickable {
+                        isExpanded = !isExpanded
+                    },
+            ) {
+                Text(
+                    text = "Membres du Project",
+                    fontSize = 14.sp,
+                    fontWeight=FontWeight.Light,
+                    color = MaterialTheme.colors.onSurface.copy(alpha = 0.5f),
+                    modifier = Modifier.padding(start = 8.dp)
+                )
+             listTasksToMember(isExpanded)
+            }
+
         }
     }
     addMemberModal(showDialog,task.id)
+
+    // Modal confirmation dialog
+
+    if (showDialogConfirmation) {
+        AlertDialog(
+            onDismissRequest = { showDialogConfirmation = false },
+            title = { Text("Confirmation") },
+            text = { Text("Êtes-vous sûr de vouloir supprimer ce projet?") },
+            confirmButton = {
+                Button(
+                    onClick = {
+                        viewModel.delete(task)
+                        CircularPropagation()
+                        showDialogConfirmation=false
+                    },
+                    colors = ButtonDefaults.buttonColors(backgroundColor = Color(colorPersonnel))
+                ) {
+                    Text("Oui", color = Color.White)
+                }
+            },
+            dismissButton = {
+                Button(
+                    onClick = { showDialogConfirmation = false },
+                    colors = ButtonDefaults.buttonColors(backgroundColor = Color(colorPersonnel)),
+
+                    ) {
+                    Text("Non", color = Color.White)
+                }
+            }
+        )
+    }
+
 }
+
 @Composable
 fun TaskModal(showDialog: MutableState<Boolean>){
     // Modal
@@ -315,3 +405,36 @@ fun addMemberModal(showDialog: MutableState<Boolean>, id: Int){
         )
     }
 }
+
+
+@SuppressLint("SuspiciousIndentation")
+@Composable
+fun listTasksToMember(isExpanded: Boolean) {
+    val viewModel = viewModel(TaskToMemberViewModel::class.java)
+    val state by viewModel.state.collectAsState()
+        if (isExpanded) {
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .heightIn(max = 200.dp)
+                    .padding(horizontal = 16.dp)
+            ) {
+                items(state.taskList) { memberToTask ->
+                    Text(
+                        text = memberToTask.idMember.toString(),
+                        fontSize = 14.sp,
+                        color = MaterialTheme.colors.onSurface.copy(alpha = 0.5f),
+                        modifier = Modifier.padding(vertical = 4.dp)
+                    )
+                }
+        }
+
+        } else {
+            Icon(
+                imageVector = Icons.Filled.KeyboardArrowDown,
+                contentDescription = null,
+                tint = MaterialTheme.colors.onSurface
+            )
+        }
+
+    }

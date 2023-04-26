@@ -39,6 +39,10 @@ class TaskViewModel(private val taskDataSource:TaskRepository=Graph.taskRepo):Vi
     fun delete(task: Task) = viewModelScope.launch {
         taskDataSource.deleteTask(task)
     }
+
+    fun update(task: Task) = viewModelScope.launch {
+        taskDataSource.updateTask(task)
+    }
     fun filterTasks(projectId:Int){
         viewModelScope.launch {
             taskDataSource.listTasGetByIdProject(projectId).collect{
