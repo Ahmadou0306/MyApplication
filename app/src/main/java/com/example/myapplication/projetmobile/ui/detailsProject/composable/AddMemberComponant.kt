@@ -42,6 +42,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.myapplication.projetmobile.dataSource.models.Member
+import com.example.myapplication.projetmobile.ui.componant.addError
 import com.example.myapplication.projetmobile.ui.detailsProject.colorPersonnel
 import com.example.myapplication.projetmobile.viewsmodels.MemberViewModel
 
@@ -88,14 +89,14 @@ fun AddMemberModal(  showDialog:MutableState<Boolean>,selectedId:Int){
                     }
                 }
             }
-
         )
     }
 }
+
 @Composable
 fun addMemberDiaolog(showDialog:MutableState<Boolean>,selectedId:Int){
     val viewModel = viewModel(MemberViewModel::class.java)
-
+    var showDialog = remember { mutableStateOf(false) }
     val id = remember { mutableStateOf(0) }
     val idProject = remember { mutableStateOf(selectedId) }
     val name = remember { mutableStateOf("") }
@@ -108,14 +109,18 @@ fun addMemberDiaolog(showDialog:MutableState<Boolean>,selectedId:Int){
 
     }
     fun addMember(){
-        val member= Member(
-            id.value,
-            idProject.value,
-            name.value,
-            email.value
-        )
-        viewModel.addMember(member)
-        initValue()
+        if(name.value.isNotBlank() && email.value.isNotBlank()){
+            val member= Member(
+                id.value,
+                idProject.value,
+                name.value,
+                email.value
+            )
+            viewModel.addMember(member)
+            initValue()
+        }else{
+            showDialog.value=true
+        }
     }
 
     Column(
@@ -134,7 +139,7 @@ fun addMemberDiaolog(showDialog:MutableState<Boolean>,selectedId:Int){
             onValueChange = { newValue ->
                 id.value = newValue.toIntOrNull()?:0
             },
-            label = { Text(text = " Name", color = Color(color = 0xFF1E88E5)) },
+            label = { Text(text = " id", color = Color(color = 0xFF1E88E5)) },
             textStyle = TextStyle(
                 fontSize = 16.sp
             ),
@@ -142,7 +147,8 @@ fun addMemberDiaolog(showDialog:MutableState<Boolean>,selectedId:Int){
                 textColor = MaterialTheme.colors.onSurface,
                 focusedBorderColor = Color(color = 0xFF1E88E5),
                 cursorColor = MaterialTheme.colors.onSurface,
-            )
+            ),
+            enabled = false
         )
 
         Spacer(modifier = Modifier.padding(vertical=8.dp))
@@ -153,7 +159,7 @@ fun addMemberDiaolog(showDialog:MutableState<Boolean>,selectedId:Int){
             onValueChange = { newValue ->
                 idProject.value = newValue.toIntOrNull()?:0
             },
-            label = { Text(text = " Name", color = Color(color = 0xFF1E88E5)) },
+            label = { Text(text = " id Project", color = Color(color = 0xFF1E88E5)) },
             textStyle = TextStyle(
                 fontSize = 16.sp
             ),
@@ -161,7 +167,8 @@ fun addMemberDiaolog(showDialog:MutableState<Boolean>,selectedId:Int){
                 textColor = MaterialTheme.colors.onSurface,
                 focusedBorderColor = Color(color = 0xFF1E88E5),
                 cursorColor = MaterialTheme.colors.onSurface,
-            )
+            ),
+            enabled = false
         )
 
         Spacer(modifier = Modifier.padding(vertical=8.dp))
@@ -172,7 +179,7 @@ fun addMemberDiaolog(showDialog:MutableState<Boolean>,selectedId:Int){
             onValueChange = { newValue ->
                 name.value = newValue
             },
-            label = { Text(text = " Name", color = Color(color = 0xFF1E88E5)) },
+            label = { Text(text = " Name Member", color = Color(color = 0xFF1E88E5)) },
             textStyle = TextStyle(
                 fontSize = 16.sp
             ),
@@ -192,7 +199,7 @@ fun addMemberDiaolog(showDialog:MutableState<Boolean>,selectedId:Int){
             onValueChange = { newValue ->
                 email.value = newValue
             },
-            label = { Text(text = " Name", color = Color(color = 0xFF1E88E5)) },
+            label = { Text(text = "E-mail", color = Color(color = 0xFF1E88E5)) },
             textStyle = TextStyle(
                 fontSize = 16.sp
             ),
@@ -203,20 +210,19 @@ fun addMemberDiaolog(showDialog:MutableState<Boolean>,selectedId:Int){
             )
         )
 
-
         Spacer(modifier = Modifier.padding(8.dp))
-        Button(onClick = { addMember()
-            }, colors = ButtonDefaults.buttonColors( backgroundColor = Color(color = 0xFF1E88E5)) ,
+        Button(
+            onClick = { addMember() },
+            colors = ButtonDefaults.buttonColors( backgroundColor = Color(color = 0xFF1E88E5)) ,
             modifier = Modifier.align(Alignment.CenterHorizontally),
             shape= CutCornerShape(topStart = 7.dp, bottomEnd = 7.dp),
             contentPadding = PaddingValues(10.dp)
         )
         {
-            Text(text = "Ajouter la tâche", color = Color(color = 0xFFFFFFFF))
+            Text(text = "Ajouter", color = Color(color = 0xFFFFFFFF))
 
         }
         Spacer(modifier = Modifier.padding(8.dp))
-
     }
-
+    addError(showDialog)
 }

@@ -26,7 +26,7 @@ import com.example.myapplication.projetmobile.viewsmodels.SubProjectViewModel
 import com.example.myapplication.projetmobile.viewsmodels.TaskViewModel
 
 @Composable
-fun ShowSubProjects() {
+fun ShowSubProjects(idProject: Int) {
     val viewModel = viewModel(SubProjectViewModel::class.java)
     val state by viewModel.state.collectAsState()
     LazyColumn(
@@ -34,7 +34,7 @@ fun ShowSubProjects() {
     ) {
         if(state.subProjectList.isNotEmpty()){
             items(state.subProjectList) { subProject ->
-                SubProjectContainer(subProject)
+                if (subProject.idProject==idProject) SubProjectContainer(subProject)
             }
         }else{
           item {
@@ -153,7 +153,7 @@ fun SubProjectContainer(subProject: SousProject) {
 }
 
 @Composable
-fun SubProjectModal(showDialog: MutableState<Boolean>){
+fun SubProjectModal(showDialog: MutableState<Boolean>,idProject:Int){
     // Modal
     if (showDialog.value) {
         Dialog(
@@ -189,7 +189,7 @@ fun SubProjectModal(showDialog: MutableState<Boolean>){
                             }
                         }
                         //list Member
-                        ShowSubProjects()
+                        ShowSubProjects(idProject)
                     }
                 }
             }

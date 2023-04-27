@@ -41,7 +41,7 @@ import com.example.myapplication.projetmobile.viewsmodels.TaskToMemberViewModel
 
 
 @Composable
-fun ListTasks() {
+fun ListTasks(idProject: Int) {
     val viewModel = viewModel(TaskViewModel::class.java)
     val state by viewModel.state.collectAsState()
     LazyColumn(
@@ -50,7 +50,7 @@ fun ListTasks() {
     ) {
         if(state.taskList.isNotEmpty()){
         items(state.taskList) { task ->
-            taskContain(task)
+            if (task.idProject==idProject) taskContain(task)
         }
         }else{
             item {
@@ -62,7 +62,7 @@ fun ListTasks() {
 
 
 @Composable
-fun ListMember(id: Int) {
+fun ListMember(idTask: Int) {
     val viewModel = viewModel(MemberViewModel::class.java)
     val state by viewModel.state.collectAsState()
     LazyColumn(
@@ -71,20 +71,32 @@ fun ListMember(id: Int) {
     ) {
 
         items(state.memberList) { member ->
-            MemberCard(member,id)
+            MemberCard(member,idTask)
         }
     }
 }
 
 
-
+@Composable
+fun rechercheMember(idMember:Int,idTask:Int): Boolean {
+    val viewModel = viewModel(TaskToMemberViewModel::class.java)
+    val state by viewModel.state.collectAsState()
+    var memberExist=false
+   for(member in state.taskList){
+        if(member.idMember==idMember && member.idTask==idTask) memberExist=true
+   }
+    return memberExist
+}
 
 @Composable
-fun MemberCard(member: Member, id: Int) {
+fun MemberCard(member: Member, idTask: Int) {
     val viewModel = viewModel(TaskToMemberViewModel::class.java)
+    val memberExist= rechercheMember(member.id, idTask)
+    var showDialog = remember { mutableStateOf(false) }
+
     var taskToMember=TaskToMember(
         0,
-        id,
+        idTask,
         member.id
     )
     Card(
@@ -115,7 +127,8 @@ fun MemberCard(member: Member, id: Int) {
             Button(
                 onClick = {
                           /* Ajouter aux tâches */
-                          viewModel.add(taskToMember)
+                            if(memberExist){showDialog.value=true }
+                            else { viewModel.add(taskToMember)}
                           },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -125,6 +138,7 @@ fun MemberCard(member: Member, id: Int) {
             }
         }
     }
+    exitMember(showDialog)
 }
 
 @SuppressLint("SuspiciousIndentation")
@@ -275,7 +289,7 @@ fun updateState():Task= Task(
                     color = MaterialTheme.colors.onSurface.copy(alpha = 0.5f),
                     modifier = Modifier.padding(start = 8.dp)
                 )
-             listTasksToMember(isExpanded)
+             listTasksToMember(isExpanded,task)
             }
 
         }
@@ -316,7 +330,7 @@ fun updateState():Task= Task(
 }
 
 @Composable
-fun TaskModal(showDialog: MutableState<Boolean>){
+fun TaskModal(showDialog: MutableState<Boolean>,idProject:Int){
     // Modal
     if (showDialog.value) {
         Dialog(
@@ -351,8 +365,8 @@ fun TaskModal(showDialog: MutableState<Boolean>){
                                 )
                             }
                         }
-                        //list Member
-                        ListTasks()
+                        //list Task
+                        ListTasks(idProject)
                     }
                 }
             }
@@ -362,7 +376,49 @@ fun TaskModal(showDialog: MutableState<Boolean>){
 
 
 @Composable
-fun addMemberModal(showDialog: MutableState<Boolean>, id: Int){
+fun exitMember(showDialog: MutableState<Boolean>){
+    // Modal
+    if (showDialog.value) {
+        Dialog(
+            onDismissRequest = { showDialog.value = false },
+            content = {
+                Surface(
+                    modifier = Modifier.fillMaxWidth(),
+                    color = Color.White,
+                    elevation = 8.dp
+                ) {
+                    Column {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(16.dp),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text(
+                                text = "Exit!!!",
+                                fontSize = 18.sp,
+                                fontWeight = FontWeight.Light
+                            )
+                            IconButton(
+                                onClick = { showDialog.value = false },
+                                modifier = Modifier.size(48.dp)
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.Close,
+                                    contentDescription = null,
+                                    tint = Color.Black
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+        )
+    }
+}
+@Composable
+fun addMemberModal(showDialog: MutableState<Boolean>, idTask: Int){
     // Modal
     if (showDialog.value) {
         Dialog(
@@ -398,7 +454,7 @@ fun addMemberModal(showDialog: MutableState<Boolean>, id: Int){
                             }
                         }
                         //list Member
-                        ListMember(id)
+                        ListMember(idTask)
                     }
                 }
             }
@@ -409,27 +465,27 @@ fun addMemberModal(showDialog: MutableState<Boolean>, id: Int){
 
 @SuppressLint("SuspiciousIndentation")
 @Composable
-fun listTasksToMember(isExpanded: Boolean) {
+fun listTasksToMember(isExpanded: Boolean, task: Task) {
     val viewModel = viewModel(TaskToMemberViewModel::class.java)
     val state by viewModel.state.collectAsState()
-        if (isExpanded) {
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .heightIn(max = 200.dp)
-                    .padding(horizontal = 16.dp)
-            ) {
-                items(state.taskList) { memberToTask ->
-                    Text(
-                        text = memberToTask.idMember.toString(),
-                        fontSize = 14.sp,
-                        color = MaterialTheme.colors.onSurface.copy(alpha = 0.5f),
-                        modifier = Modifier.padding(vertical = 4.dp)
-                    )
-                }
-        }
+    val viewModelMember = viewModel(MemberViewModel::class.java)
 
-        } else {
+    if (isExpanded) {
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxWidth()
+                .heightIn(max = 200.dp)
+                .padding(horizontal = 16.dp)
+        ) {
+            items(state.taskList) { memberToTask ->
+               if(memberToTask.idTask==task.id){
+                   val memberState by viewModelMember.getMemberById(memberToTask.idMember)
+                       .collectAsState(initial = null)
+                   memberState?.let { memberCard(it) }
+               }
+            }
+        }
+    } else {
             Icon(
                 imageVector = Icons.Filled.KeyboardArrowDown,
                 contentDescription = null,

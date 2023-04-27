@@ -136,14 +136,14 @@ fun container(member:Member){
 
 }
 @Composable
-fun ListMembersProject(members: List<Member>) {
+fun ListMembersProject(members: List<Member>,idProject: Int) {
     LazyColumn(
         modifier = Modifier.background(color = Color.LightGray),
         contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
     ) {
         if (members.isNotEmpty()){
             items(members) { member ->
-                container(member)
+                if (member.idProject==idProject) container(member)
             }
         }else{
             item {
@@ -155,7 +155,7 @@ fun ListMembersProject(members: List<Member>) {
 }
 
 @Composable
-fun ListMemberModal(showDialog: MutableState<Boolean>) {
+fun ListMemberModal(showDialog: MutableState<Boolean>,idProject:Int) {
     val viewModel = viewModel(MemberViewModel::class.java)
     val state by viewModel.state.collectAsState()
 
@@ -194,7 +194,7 @@ fun ListMemberModal(showDialog: MutableState<Boolean>) {
                             }
                         }
                         //list Member
-                        ListMembersProject(state.memberList)
+                        ListMembersProject(state.memberList,idProject)
                     }
                 }
             }

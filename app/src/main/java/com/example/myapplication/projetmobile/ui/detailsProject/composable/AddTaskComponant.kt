@@ -63,6 +63,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.lifecycleScope
+import com.example.myapplication.projetmobile.ui.componant.addError
 import kotlinx.coroutines.launch
 import java.util.Calendar
 import java.util.Date
@@ -125,6 +126,7 @@ fun AddTaskForm(showDialog: MutableState<Boolean>, selectedId:Int){
     val dueDateState = remember { mutableStateOf("") }
     val finDateState = remember { mutableStateOf("") }
     var nomSelectedMember by remember { mutableStateOf("") }
+    var showDialog = remember { mutableStateOf(false) }
 
 
     val context = LocalContext.current
@@ -164,17 +166,24 @@ fun AddTaskForm(showDialog: MutableState<Boolean>, selectedId:Int){
         nomSelectedMember=""
     }
     fun addTask(){
-        val task= Task(
-            0,
-            selectedId,
-            nameState.value.text,
-            descriptionState.value.text,
-            dueDateState.value,
-            finDateState.value,
-            false,
-        )
-        initValue()
-        viewModel.add(task)
+        if(nameState.value.text.isNotBlank()
+            && descriptionState.value.text.isNotBlank()
+            && dueDateState.value.isNotBlank()
+            && finDateState.value.isNotBlank()){
+            val task= Task(
+                0,
+                selectedId,
+                nameState.value.text,
+                descriptionState.value.text,
+                dueDateState.value,
+                finDateState.value,
+                false,
+            )
+            initValue()
+            viewModel.add(task)
+        }else{
+            showDialog.value=true
+        }
     }
 
     Column(
@@ -240,7 +249,7 @@ fun AddTaskForm(showDialog: MutableState<Boolean>, selectedId:Int){
             onValueChange = {   newValue ->
                 dueDateState.value = newValue
             },
-            label = { Text(text = "Sub-Project Start", color = Color(color = 0xFF1E88E5)) },
+            label = { Text(text = "Task Start", color = Color(color = 0xFF1E88E5)) },
             readOnly = true,
             trailingIcon = {
                 FloatingActionButton(onClick = { datePickerDialog.show() },
@@ -270,7 +279,7 @@ fun AddTaskForm(showDialog: MutableState<Boolean>, selectedId:Int){
             value = finDateState.value,
             modifier = Modifier.fillMaxWidth(),
             onValueChange = {  },
-            label = { Text(text = "Sub-Project Deadline", color = Color(color = 0xFF1E88E5)) },
+            label = { Text(text = "Task Deadline", color = Color(color = 0xFF1E88E5)) },
             readOnly = true,
             trailingIcon = {
                 FloatingActionButton(onClick = { datePickerDialog2.show() },
@@ -306,5 +315,5 @@ fun AddTaskForm(showDialog: MutableState<Boolean>, selectedId:Int){
         }
         Spacer(modifier = Modifier.padding(8.dp))
     }
-
+    addError(showDialog)
 }

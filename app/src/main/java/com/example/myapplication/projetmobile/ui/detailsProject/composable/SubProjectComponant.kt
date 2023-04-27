@@ -45,6 +45,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.myapplication.projetmobile.dataSource.models.SousProject
+import com.example.myapplication.projetmobile.ui.componant.addError
 import com.example.myapplication.projetmobile.viewsmodels.SubProjectViewModel
 import java.util.Calendar
 import java.util.Date
@@ -99,6 +100,7 @@ fun AddSubProjectModal(  showDialog:MutableState<Boolean>,selectedId:Int){
 @Composable
 fun SubProjectForm(showDialog:MutableState<Boolean>,selectedId:Int){
     val viewModel = viewModel(SubProjectViewModel::class.java)
+    var showDialog = remember { mutableStateOf(false) }
 
     val context = LocalContext.current
     val year: Int
@@ -133,16 +135,23 @@ fun SubProjectForm(showDialog:MutableState<Boolean>,selectedId:Int){
         dateStart.value=""
     }
     fun addSubProject(){
-        val subProject=SousProject(
-            0,
-            selectedId,
-            name,
-            description,
-            dateStart.value,
-            dateEnd.value,
-        )
-        viewModel.addSubProject(subProject)
-        initValue()
+        if(name.isNotBlank()
+            && description.isNotBlank()
+            && dateStart.value.isNotBlank()
+            && dateEnd.value.isNotBlank()){
+            val subProject=SousProject(
+                0,
+                selectedId,
+                name,
+                description,
+                dateStart.value,
+                dateEnd.value,
+            )
+            viewModel.addSubProject(subProject)
+            initValue()
+        }else{
+            showDialog.value=true
+        }
     }
     Column(
         modifier = Modifier
@@ -271,5 +280,5 @@ fun SubProjectForm(showDialog:MutableState<Boolean>,selectedId:Int){
         }
         Spacer(modifier = Modifier.padding(8.dp))
     }
-
+    addError(showDialog)
 }

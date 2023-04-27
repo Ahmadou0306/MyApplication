@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.myapplication.projetmobile.dataSource.models.Project
+import com.example.myapplication.projetmobile.ui.componant.addError
 import com.example.myapplication.projetmobile.ui.home.componant.BottomBar
 import com.example.myapplication.projetmobile.ui.home.componant.FloatingActionButtonComp
 import com.example.myapplication.projetmobile.ui.home.componant.drawerView
@@ -75,17 +76,18 @@ fun ScaffoldContain(onFormNavigate: () -> Unit){
     var chefName = remember { mutableStateOf(TextFieldValue()) }
     val dateStart = remember { mutableStateOf("") }
     val dateEnd = remember { mutableStateOf("") }
+    var showDialog = remember { mutableStateOf(false) }
 
     val datePickerDialog = DatePickerDialog(
         context,
         { _: DatePicker, year: Int, month: Int, dayOfMonth: Int ->
-            dateStart.value = "$year-$month-$dayOfMonth"
+            dateStart.value = "$year-${month+1}-$dayOfMonth"
         }, year, month, day
     )
     val datePickerDialog2 = DatePickerDialog(
         context,
         { _: DatePicker, year: Int, month: Int, dayOfMonth: Int ->
-            dateEnd.value = "$year-$month-$dayOfMonth"
+            dateEnd.value = "$year-${month+1}-$dayOfMonth"
         }, year, month, day
     )
     fun initialForm(){
@@ -97,15 +99,25 @@ fun ScaffoldContain(onFormNavigate: () -> Unit){
         dateStart.value=""
     }
     fun addProject(){
-        val project=Project(
-            0,
-            name.value.text,
-            chefName.value.text,
-            description.value.text,
-            dateStart.value,
-            dateEnd.value
-        )
-        viewModel.addProject(project = project)
+        if(name.value.text.isNotBlank()
+            && chefName.value.text.isNotBlank()
+            && description.value.text.isNotBlank()
+            && dateStart.value.isNotBlank()
+            && dateEnd.value.isNotBlank()
+                ){
+            val project=Project(
+                0,
+                name.value.text,
+                chefName.value.text,
+                description.value.text,
+                dateStart.value,
+                dateEnd.value
+            )
+            viewModel.addProject(project = project)
+        }else{
+        showDialog.value=true
+        }
+
     }
 
     Column(modifier = Modifier
@@ -248,6 +260,6 @@ fun ScaffoldContain(onFormNavigate: () -> Unit){
         {
             Text(text = "Create Project", color = Color(color = 0xFFFFFFFF))
         }
-
     }
+    addError(showDialog)
 }

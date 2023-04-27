@@ -197,7 +197,7 @@ fun DetailHome(
                         }
                     }
                     Box {
-                        TroisCards()
+                        TroisCards(selectedId)
                     }
                 }
             }
@@ -219,7 +219,7 @@ fun DetailHome(
 }
 
 @Composable
-fun TroisCards() {
+fun TroisCards(idProject:Int) {
     var showListDialogMember = remember { mutableStateOf(false) }
     var showListDialogTask = remember { mutableStateOf(false) }
     var showListDialogSubProject = remember { mutableStateOf(false) }
@@ -284,9 +284,9 @@ fun TroisCards() {
                                 else -> ""
                             })
 
-                            ListMemberModal(showListDialogMember)
-                            TaskModal(showListDialogTask)
-                            SubProjectModal(showListDialogSubProject)
+                            ListMemberModal(showListDialogMember,idProject)
+                            TaskModal(showListDialogTask,idProject)
+                            SubProjectModal(showListDialogSubProject,idProject)
                         }
                     }
                 }
@@ -294,19 +294,7 @@ fun TroisCards() {
         }
     }
 }
-@SuppressLint("CoroutineCreationDuringComposition")
-@Composable
-fun getProjectById(id: Int): Project {
-    val viewModelMember = viewModel(ProjectViewModel::class.java)
-    var project: Project? = null
-    val lifecycleOwner = LocalLifecycleOwner.current
-    lifecycleOwner.lifecycleScope.launch {
-        viewModelMember.getProjectById(id).collect {
-            project = it
-        }
-    }
-    return project!!
-}
+
 @Composable
 fun Header(id:Int){
     val viewModelMember = viewModel(ProjectViewModel::class.java)

@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.myapplication.projetmobile.Graph
 import com.example.myapplication.projetmobile.dataSource.models.Member
+import com.example.myapplication.projetmobile.dataSource.models.Project
 import com.example.myapplication.projetmobile.dataSource.models.Task
 import com.example.myapplication.projetmobile.repository.MemberRepository
 import kotlinx.coroutines.flow.Flow
@@ -37,12 +38,10 @@ class MemberViewModel(private val memberDataSource: MemberRepository = Graph.mem
     fun deleteMember(member: Member) = viewModelScope.launch {
         memberDataSource.deleteMember(member)
     }
-    fun getMemberById(id: Int): Flow<Member?> = memberDataSource.getMemberById(id).flatMapLatest { member ->
-        val states = _state.value.copy(memberSelected = member != null)
-        _state.value = states
-        memberSelected.value = member != null
-        flowOf(member)
+    fun getMemberById(id: Int): Flow<Member?> {
+        return memberDataSource.getMemberById(id)
     }
+
     data class MemberViewState(
         val memberList: List<Member> = emptyList(),
         val memberSelected: Boolean = false,
