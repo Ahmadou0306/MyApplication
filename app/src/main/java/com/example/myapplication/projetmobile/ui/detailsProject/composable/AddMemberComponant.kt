@@ -69,7 +69,7 @@ fun AddMemberModal(  showDialog:MutableState<Boolean>,selectedId:Int){
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Text(
-                                text = "Form Task",
+                                text = "Form Member",
                                 fontSize = 18.sp,
                                 fontWeight = FontWeight.Bold
                             )

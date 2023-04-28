@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.myapplication.projetmobile.dataSource.models.Project
+import com.example.myapplication.projetmobile.ui.componant.addError
 import com.example.myapplication.projetmobile.ui.home.componant.BottomBar
 import com.example.myapplication.projetmobile.ui.home.componant.FloatingActionButtonComp
 import com.example.myapplication.projetmobile.ui.home.componant.drawerView
@@ -69,6 +70,8 @@ fun ScaffoldContain(onFormNavigate: () -> Unit){
     month = calendar.get(Calendar.MONTH)
     day = calendar.get(Calendar.DAY_OF_MONTH)
     calendar.time = Date()
+    var showDialog = remember { mutableStateOf(false) }
+
 
     var description = remember { mutableStateOf(TextFieldValue()) }
     var name = remember { mutableStateOf(TextFieldValue()) }
@@ -97,15 +100,25 @@ fun ScaffoldContain(onFormNavigate: () -> Unit){
         dateStart.value=""
     }
     fun addProject(){
-        val project=Project(
-            0,
-            name.value.text,
-            chefName.value.text,
-            description.value.text,
-            dateStart.value,
-            dateEnd.value
-        )
-        viewModel.addProject(project = project)
+        if(
+            name.value.text.isNotBlank()
+            && chefName.value.text.isNotBlank()
+            && description.value.text.isNotBlank()
+            && dateStart.value.isNotBlank()
+            && dateEnd.value.isNotBlank()
+        ){
+            val project=Project(
+                0,
+                name.value.text,
+                chefName.value.text,
+                description.value.text,
+                dateStart.value,
+                dateEnd.value
+            )
+            viewModel.addProject(project = project)
+        }else{
+                showDialog.value=true
+        }
     }
 
     Column(modifier = Modifier
@@ -250,4 +263,5 @@ fun ScaffoldContain(onFormNavigate: () -> Unit){
         }
 
     }
+    addError(showDialog)
 }
