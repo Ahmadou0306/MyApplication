@@ -39,7 +39,7 @@ private const val colorPersonnel =0xFF1E88E5
 fun BottomBar(onHomeNavigate:()->Unit){
     var isShow = remember { mutableStateOf(false) }
     var isMessageShow= remember { mutableStateOf(false) }
-
+    val idNotification= listNotification()
     BottomAppBar(
         backgroundColor= Color(color = colorPersonnel),
         cutoutShape = MaterialTheme.shapes.small.copy(
@@ -112,9 +112,9 @@ fun BottomBar(onHomeNavigate:()->Unit){
                             tint = Color.White,
                             modifier = Modifier.size(24.dp)
                         )
-                        if (listNotification() > 0) {
+                        if (idNotification > 0) {
                             Text(
-                                text = listNotification().toString(),
+                                text = idNotification.toString(),
                                 color = Color.White,
                                 fontSize = 12.sp,
                                 fontWeight = FontWeight.Bold,
