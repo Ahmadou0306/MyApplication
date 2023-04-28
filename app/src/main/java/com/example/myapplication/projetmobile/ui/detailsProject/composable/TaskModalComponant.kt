@@ -36,7 +36,7 @@ import androidx.compose.ui.unit.dp
 import com.example.myapplication.R
 import com.example.myapplication.projetmobile.dataSource.models.Member
 import com.example.myapplication.projetmobile.dataSource.models.TaskToMember
-import com.example.myapplication.projetmobile.ui.componant.EmptyContentListProject
+import com.example.myapplication.projetmobile.ui.componant.EmptyContentList
 import com.example.myapplication.projetmobile.viewsmodels.TaskToMemberViewModel
 
 
@@ -54,7 +54,7 @@ fun ListTasks(idProject: Int) {
         }
         }else{
             item {
-                EmptyContentListProject()
+                EmptyContentList()
             }
         }
     }

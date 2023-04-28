@@ -59,5 +59,19 @@ fun EmptyContentListProject() {
         )
     }
 }
+@Composable
+fun EmptyContentList() {
+    Row( verticalAlignment = Alignment.CenterVertically) {
+        Spacer(modifier = Modifier.height(50.dp))
+        Image(
+            painter = painterResource(R.drawable.emptyfolder),
+            contentDescription = "Empty content image",
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(10.dp)
+        )
+    }
+}
+
 
 

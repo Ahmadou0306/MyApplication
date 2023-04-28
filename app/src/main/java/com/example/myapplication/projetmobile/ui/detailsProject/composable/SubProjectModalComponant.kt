@@ -19,11 +19,9 @@ import androidx.compose.ui.unit.*
 import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.myapplication.projetmobile.dataSource.models.SousProject
-import com.example.myapplication.projetmobile.ui.componant.EmptyContentListProject
+import com.example.myapplication.projetmobile.ui.componant.EmptyContentList
 import com.example.myapplication.projetmobile.ui.detailsProject.colorPersonnel
-import com.example.myapplication.projetmobile.viewsmodels.MemberViewModel
 import com.example.myapplication.projetmobile.viewsmodels.SubProjectViewModel
-import com.example.myapplication.projetmobile.viewsmodels.TaskViewModel
 
 @Composable
 fun ShowSubProjects(idProject: Int) {
@@ -38,7 +36,7 @@ fun ShowSubProjects(idProject: Int) {
             }
         }else{
           item {
-              EmptyContentListProject()
+              EmptyContentList()
           }
         }
         }

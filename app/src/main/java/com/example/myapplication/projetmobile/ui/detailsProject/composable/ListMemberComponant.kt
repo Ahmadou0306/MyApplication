@@ -36,10 +36,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.myapplication.projetmobile.ui.componant.EmptyContentListProject
+import com.example.myapplication.projetmobile.ui.componant.EmptyContentList
 import com.example.myapplication.projetmobile.ui.detailsProject.colorPersonnel
 import com.example.myapplication.projetmobile.viewsmodels.MemberViewModel
-import com.example.myapplication.projetmobile.viewsmodels.SubProjectViewModel
 
 
 @Composable
@@ -147,7 +146,7 @@ fun ListMembersProject(members: List<Member>,idProject: Int) {
             }
         }else{
             item {
-                EmptyContentListProject()
+                EmptyContentList()
             }
         }
 
