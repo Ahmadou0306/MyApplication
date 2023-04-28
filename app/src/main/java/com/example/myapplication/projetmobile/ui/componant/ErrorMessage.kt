@@ -45,7 +45,7 @@ fun addError(showDialog: MutableState<Boolean>){
                         ) {
                             Text(
                                 text = "veuillez remplire les champs vides !!!",
-                                fontSize = 17.sp,
+                                fontSize = 15.sp,
                                 fontWeight = FontWeight.Light
                             )
                             IconButton(

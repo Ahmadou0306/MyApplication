@@ -42,7 +42,6 @@ fun AddFormProject(
         },
         // pass the drawer
         drawerContent = {
-            drawerView()
         },
         isFloatingActionButtonDocked = true,
         floatingActionButton = {
