@@ -17,4 +17,12 @@ class NotificationRepository(private val notificationDao: NotificationDao) {
             notificationDao.deleteNotification(notification.id)
         }
     }
+
+    suspend fun deleteAllNotification(){
+        Dispatchers.IO.apply {
+            notificationDao.deleteAllNotifications()
+        }
+    }
+
+
 }

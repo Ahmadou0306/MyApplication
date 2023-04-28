@@ -36,6 +36,9 @@ class NotificationViewModel(private val notificationDao: NotificationRepository 
         }
     }
 
+    fun deleteAllNotification()=viewModelScope.launch {
+        notificationDao.deleteAllNotification()
+    }
     data class NotificationViewState(
         val notificationList: List<Notification> = emptyList(),
         val memberSelected: Boolean = false,

@@ -7,29 +7,28 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.myapplication.projetmobile.dataSource.models.Notification
+import com.example.myapplication.projetmobile.dataSource.models.Project
+import com.example.myapplication.projetmobile.ui.componant.EmptyContent
 import com.example.myapplication.projetmobile.ui.componant.EmptyContentCalendar
-import com.example.myapplication.projetmobile.ui.detailsProject.composable.MemberCard
-import com.example.myapplication.projetmobile.ui.detailsProject.composable.TasksChart
-import com.example.myapplication.projetmobile.viewsmodels.MemberViewModel
 import com.example.myapplication.projetmobile.viewsmodels.ProjectViewModel
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -40,7 +39,7 @@ import java.time.format.DateTimeFormatter
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable fun Calendrier(datess: List<LocalDate>, modifier: Modifier = Modifier) {
-
+    var showDialog = remember { mutableStateOf(false) }
     val startDate = remember { mutableStateOf(datess[0]) }
     val selectedDate = remember { mutableStateOf(startDate.value) }
 
@@ -134,26 +133,73 @@ import java.time.format.DateTimeFormatter
                             text = dayOfMonth.toString(),
                             style = MaterialTheme.typography.h6.copy(
                                 color = textColor,
-                                fontWeight = if (isInRange) FontWeight.Bold else FontWeight.Normal,
-                                fontSize = if (isInRange) 20.sp else 16.sp,
-                                letterSpacing = if (isInRange) 0.5.sp else 0.sp
+                                fontWeight = if (isInRange) FontWeight.Light else FontWeight.Normal,
+                                fontSize = if (isInRange) 15.sp else 16.sp,
                             ),
                             modifier = Modifier
-                                .clickable { selectedDate.value = date; }
+                                .clickable {
+                                    selectedDate.value = date
+                                    if (isInRange) showDialog.value = true
+                                }
                                 .weight(1f)
                                 .background(color = backgroundColor, shape = shape)
                                 .border(
-                                    width = 2.dp,
+                                    width = 1.dp,
                                     color = if (isInRange) Color(com.example.myapplication.projetmobile.ui.detailsProject.colorPersonnel) else Color.Transparent,
                                     shape = shape
                                 )
-                                .padding(8.dp),
+                                .padding(5.dp),
                             textAlign = TextAlign.Center
                         )
                     }
                 }
             }
         }
+    }
+    selectedDate(showDialog,selectedDate.value)
+}
+
+@Composable
+fun selectedDate(showDialog: MutableState<Boolean>, value: LocalDate){
+    // Modal
+    if (showDialog.value) {
+        Dialog(
+            onDismissRequest = { showDialog.value = false },
+            content = {
+                Surface(
+                    modifier = Modifier.fillMaxWidth(),
+                    color = Color.White,
+                    elevation = 8.dp
+                ) {
+                    Column {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(16.dp),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text(
+                                text = "project pour $value",
+                                fontSize = 15.sp,
+                                fontWeight = FontWeight.Light
+                            )
+                            IconButton(
+                                onClick = { showDialog.value = false },
+                                modifier = Modifier.size(48.dp)
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.Close,
+                                    contentDescription = null,
+                                    tint = Color.Black
+                                )
+                            }
+                        }
+                        rechercheProjectByDate(value)
+                    }
+                }
+            }
+        )
     }
 }
 
@@ -213,5 +259,48 @@ fun CalendarModal(showDialog: MutableState<Boolean>){
                     }
                 }
         )
+    }
+}
+
+
+@Composable
+fun projectCalendar(project: Project) {
+    Card(
+        modifier = Modifier.padding(16.dp),
+        elevation = 4.dp,
+        shape = RoundedCornerShape(8.dp)
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.padding(16.dp)
+        ) {
+            Icon(
+                imageVector = Icons.Default.LocationOn,
+                contentDescription = "",
+                tint = MaterialTheme.colors.secondary,
+                modifier = Modifier.size(48.dp)
+            )
+            Spacer(modifier = Modifier.width(16.dp))
+            Text(
+                text = "${project.name}",
+                style = MaterialTheme.typography.h6
+            )
+        }
+    }
+}
+
+@Composable
+fun rechercheProjectByDate(date: LocalDate) {
+    val viewModel = viewModel(ProjectViewModel::class.java)
+    val state by viewModel.state.collectAsState()
+    LazyColumn {
+        if (state.projectList.isNotEmpty()){
+            items(state.projectList) { project ->
+                val projectDate = LocalDate.parse(project.dueDate, DateTimeFormatter.ofPattern("yyyy-M-d"))
+                if (date == projectDate) {
+                    projectCalendar(project)
+                }
+            }
+        }
     }
 }

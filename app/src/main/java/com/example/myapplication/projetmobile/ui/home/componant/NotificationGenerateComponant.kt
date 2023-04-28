@@ -51,6 +51,7 @@ fun countNotificationsToday(projectList: List<Project>): Int {
     val inputFormatter = DateTimeFormatter.ofPattern("yyyy-M-d")
     val outputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
     val today = LocalDate.now().format(outputFormatter)
+    viewModel.deleteAllNotification()
     var count = 0
     for (project in projectList) {
         val projectDate = LocalDate.parse(project.dueDateFin, inputFormatter)

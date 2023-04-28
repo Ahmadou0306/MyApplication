@@ -81,13 +81,13 @@ fun ScaffoldContain(onFormNavigate: () -> Unit){
     val datePickerDialog = DatePickerDialog(
         context,
         { _: DatePicker, year: Int, month: Int, dayOfMonth: Int ->
-            dateStart.value = "$year-$month-$dayOfMonth"
+            dateStart.value = "$year-${month+1}-$dayOfMonth"
         }, year, month, day
     )
     val datePickerDialog2 = DatePickerDialog(
         context,
         { _: DatePicker, year: Int, month: Int, dayOfMonth: Int ->
-            dateEnd.value = "$year-$month-$dayOfMonth"
+            dateEnd.value = "$year-${month+1}-$dayOfMonth"
         }, year, month, day
     )
     fun initialForm(){

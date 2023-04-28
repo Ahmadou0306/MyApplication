@@ -9,15 +9,16 @@ import androidx.navigation.navArgument
 import com.example.myapplication.projetmobile.ui.detailsProject.DetailHome
 import com.example.myapplication.projetmobile.ui.detailsProject.composable.TasksChart
 import com.example.myapplication.projetmobile.ui.home.Home
+import com.example.myapplication.projetmobile.ui.home.componant.projectCalendar
 import com.example.myapplication.projetmobile.ui.project.AddFormProject
 
 sealed class NavRoute(val route: String) {
     object Home : NavRoute("Home")
-    object AddTaskScreen : NavRoute("AddTaskScreen")
-    object AddMemberForm:NavRoute("AddMemberForm")
+
     object DetailHome:NavRoute("DetailHome")
     object AddFormProject:NavRoute("AddFormProject")
     object TasksChart:NavRoute("TasksChart")
+    object projectCalendar:NavRoute("projectCalendar")
 }
 
 @Composable
@@ -84,13 +85,7 @@ fun NavHost() {
            onHomeNavigate = {
                navController.navigateUp()
            }
-
            )
        }
-
-
-
-
-
     }
 }
