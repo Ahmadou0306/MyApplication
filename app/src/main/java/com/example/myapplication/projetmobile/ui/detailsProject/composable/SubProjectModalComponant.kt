@@ -30,18 +30,23 @@ fun ShowSubProjects(idProject: Int) {
     LazyColumn(
         modifier = Modifier.padding(vertical = 8.dp, horizontal = 16.dp)
     ) {
-        if(state.subProjectList.isNotEmpty()){
-            items(state.subProjectList) { subProject ->
-                if (subProject.idProject==idProject) SubProjectContainer(subProject)
+        if(state.memberSelected){
+            item {
+                CircularProgressIndicator()
             }
         }else{
-          item {
-              EmptyContentList()
-          }
+            if(state.subProjectList.isNotEmpty()){
+                items(state.subProjectList) { subProject ->
+                    if (subProject.idProject==idProject) SubProjectContainer(subProject)
+                }
+            }else{
+                item {
+                    EmptyContentList()
+                }
+            }
         }
-        }
-
     }
+}
 @Composable
 fun SubProjectContainer(subProject: SousProject) {
     var showDialogConfirmation by remember { mutableStateOf(false) }

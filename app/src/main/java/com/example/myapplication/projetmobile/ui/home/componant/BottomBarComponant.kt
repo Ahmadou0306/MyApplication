@@ -57,7 +57,7 @@ fun BottomBar(onHomeNavigate:()->Unit){
                     )
                 }
                 Row(
-                    horizontalArrangement = Arrangement.spacedBy(90.dp),
+                    horizontalArrangement = Arrangement.spacedBy(70.dp),
                     modifier = Modifier.background(
                         Color(color = colorPersonnel)
                     )
@@ -97,7 +97,7 @@ fun BottomBar(onHomeNavigate:()->Unit){
 
                     Box(
                         modifier = Modifier
-                            .size(48.dp)
+                            .width(40.dp)
                             .clickable {
                                 iconRotations[2].value = true
                                 isMessageShow.value = true

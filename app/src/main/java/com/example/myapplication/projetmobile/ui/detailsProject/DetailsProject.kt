@@ -29,6 +29,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -120,6 +121,7 @@ fun ActionIcons(selectedId: Int) {
     AddSubProjectModal(showDialogSubProject, selectedId)
     AddTaskModal(showDialogTask , selectedId)
     DiagramModal(showDiagram, selectedId)
+
 }
 
 
@@ -170,14 +172,40 @@ fun DetailHome(
         )
     }
     Scaffold(
-        // Pass the body in
-        // content parameter
+        topBar = {
+            TopAppBar(
+                backgroundColor = Color.White,
+                contentColor = Color.Black,
+                elevation = 1.dp,
+                modifier = Modifier.height(130.dp)
+            ) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(horizontal = 12.dp, vertical = 8.dp)
+                        .clip(
+                            CutCornerShape(
+                                topStart = 30.dp,
+                                topEnd = 0.dp,
+                                bottomStart = 0.dp,
+                                bottomEnd = 30.dp,
+                            )
+                        )
+                        .background(Color(colorPersonnel))
+                ) {
+                    Header(selectedId)
+                }
+            }
+        },
         content = {
             Surface {
-                Column {
-                    Box{
-                        Header(selectedId)
-                    }
+                Column (
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .fillMaxHeight()
+                    ,
+
+                        ) {
                     Box {
                         ActionIcons(selectedId)
                     }
@@ -187,9 +215,7 @@ fun DetailHome(
                             .padding(vertical = 0.dp, horizontal = 16.dp)
                     ) {
                         Button(
-                            onClick = {
-                                showDialog=true
-                                      },
+                            onClick = { showDialog = true },
                             modifier = Modifier.fillMaxWidth(),
                             colors = ButtonDefaults.buttonColors(backgroundColor = Color(colorPersonnel))
                         ) {
@@ -202,19 +228,16 @@ fun DetailHome(
                 }
             }
         },
-        // pass the drawer
         drawerContent = {
+            // TODO: Add drawer content
         },
         isFloatingActionButtonDocked = true,
         floatingActionButton = {
-            // Create a floating action button in
-            // floatingActionButton parameter of scaffold
-                               FloatingActionButtonComp(onNavigate = onNavigateFloat)
+            FloatingActionButtonComp(onNavigate = onNavigateFloat)
         },
-
-        // pass the bottomBar
-        // we created
-        bottomBar = { BottomBar(onHomeNavigate) }
+        bottomBar = {
+            BottomBar(onHomeNavigate)
+        }
     )
 }
 
@@ -240,7 +263,7 @@ fun TroisCards(idProject:Int) {
                 Modifier.padding(
                     start = cardPadding,
                     end = cardPadding,
-                    top = 50.dp,
+                    top = 35.dp,
                 )
             ) {
                 Card(

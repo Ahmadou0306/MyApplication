@@ -64,6 +64,7 @@ dependencies {
     implementation "androidx.compose.material:material:1.2.0"
     implementation "androidx.compose.runtime:runtime:1.0.5"
     implementation "androidx.compose.runtime:runtime-livedata:1.2.0"
+    implementation "androidx.viewpager2:viewpager2:1.0.0"
     def nav_version = "2.5.3"
 
     // Java language implementation

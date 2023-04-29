@@ -13,6 +13,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.AlertDialog
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
@@ -193,7 +194,11 @@ fun ListMemberModal(showDialog: MutableState<Boolean>,idProject:Int) {
                             }
                         }
                         //list Member
-                        ListMembersProject(state.memberList,idProject)
+                        if(state.memberSelected){
+                            CircularProgressIndicator()
+                        }else{
+                            ListMembersProject(state.memberList,idProject)
+                        }
                     }
                 }
             }
