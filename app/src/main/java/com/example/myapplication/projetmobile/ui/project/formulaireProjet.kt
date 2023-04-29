@@ -18,8 +18,10 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.myapplication.projetmobile.dataSource.models.Project
 import com.example.myapplication.projetmobile.ui.componant.addError
@@ -27,6 +29,7 @@ import com.example.myapplication.projetmobile.ui.home.componant.BottomBar
 import com.example.myapplication.projetmobile.ui.home.componant.FloatingActionButtonComp
 import com.example.myapplication.projetmobile.ui.home.componant.drawerView
 import com.example.myapplication.projetmobile.viewsmodels.ProjectViewModel
+import kotlinx.coroutines.delay
 import java.util.*
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
@@ -59,6 +62,7 @@ fun AddFormProject(
 }
 @Composable
 fun ScaffoldContain(onFormNavigate: () -> Unit){
+    val colorValidation = Color(0xFFB8FCFF)
     val viewModel = viewModel(ProjectViewModel::class.java)
     val context = LocalContext.current
     val year: Int
@@ -70,8 +74,7 @@ fun ScaffoldContain(onFormNavigate: () -> Unit){
     day = calendar.get(Calendar.DAY_OF_MONTH)
     calendar.time = Date()
     var showDialog = remember { mutableStateOf(false) }
-
-
+    var formClickedScaffold by remember { mutableStateOf(false) }
     var description = remember { mutableStateOf(TextFieldValue()) }
     var name = remember { mutableStateOf(TextFieldValue()) }
     var chefName = remember { mutableStateOf(TextFieldValue()) }
@@ -114,11 +117,29 @@ fun ScaffoldContain(onFormNavigate: () -> Unit){
                 dateStart.value,
                 dateEnd.value
             )
+            formClickedScaffold=true
             viewModel.addProject(project = project)
         }else{
                 showDialog.value=true
         }
     }
+
+    @Composable
+    fun afficheMessageValidation() {
+        Dialog(
+            onDismissRequest = { /*TODO*/ },
+        ) {
+            Text("Le projet à été créé avec succés !",
+                color = colorValidation,
+                textAlign = TextAlign.Center)
+            LaunchedEffect(formClickedScaffold) {
+                delay(3000)
+                formClickedScaffold=false
+            }
+        }
+
+    }
+
 
     Column(modifier = Modifier
         .fillMaxWidth()
@@ -259,6 +280,9 @@ fun ScaffoldContain(onFormNavigate: () -> Unit){
         )
         {
             Text(text = "Create Project", color = Color(color = 0xFFFFFFFF))
+        }
+        if(formClickedScaffold){
+            afficheMessageValidation()
         }
 
     }
