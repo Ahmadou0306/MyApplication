@@ -5,6 +5,10 @@ import android.content.Context
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.TweenSpec
+import androidx.compose.animation.core.animate
+import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
@@ -19,6 +23,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.MaterialTheme
@@ -33,6 +41,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
@@ -42,9 +51,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.myapplication.R
 import com.example.myapplication.projetmobile.MyPreferences
+import kotlinx.coroutines.delay
 
 @Composable
 fun WelcomePage(onNext: () -> Unit) {
+
     val offset = remember { Animatable(0f) }
 
     LaunchedEffect(Unit) {
@@ -68,7 +79,7 @@ fun WelcomePage(onNext: () -> Unit) {
         ) {
             Text(
                 text = "Bienvenue dans Team Flow !",
-                fontSize = 28.sp,
+                fontSize = 25.sp,
                 fontWeight = FontWeight.Light,
                 textAlign = TextAlign.Center,
                 modifier = Modifier
@@ -76,7 +87,7 @@ fun WelcomePage(onNext: () -> Unit) {
                     .animateContentSize()
             )
             Image(
-                painter = painterResource(id = R.drawable.team),
+                painter = painterResource(id = R.drawable.equipewecome),
                 contentDescription = "Illustration de bienvenue",
                 modifier = Modifier
                     .fillMaxWidth()
@@ -89,8 +100,8 @@ fun WelcomePage(onNext: () -> Unit) {
                 },
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
-                    .padding(top = 16.dp)
-                    .size(width = 200.dp, height = 60.dp),
+                    .padding(top = 10.dp)
+                    .size(width = 200.dp, height = 40.dp),
                 colors = ButtonDefaults.buttonColors(
                     backgroundColor = Color.Blue,
                     contentColor = Color.White
@@ -98,8 +109,8 @@ fun WelcomePage(onNext: () -> Unit) {
             ) {
                 Text(
                     text = "Commencer",
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Light,
+                    fontSize = 15.sp,
                     modifier = Modifier
                         .alpha(with(LocalDensity.current) { offset.value })
                         .animateContentSize()
@@ -108,6 +119,7 @@ fun WelcomePage(onNext: () -> Unit) {
         }
     }
 }
+
 @SuppressLint("RememberReturnType")
 @Composable
 fun AppDescriptionPage(onNext: () -> Unit) {
@@ -131,60 +143,58 @@ fun AppDescriptionPage(onNext: () -> Unit) {
             .fillMaxSize()
             .background(animatedColor.value)
     ) {
-        Image(
-            painter = painterResource(R.drawable.undraw_welcoming_re_x0qo),
-            contentDescription = "Image de fond",
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(300.dp)
-                .padding(bottom = 16.dp)
-        )
         Column(
             modifier = Modifier
-                .fillMaxSize()
-                .padding(32.dp)
+                .fillMaxWidth()
+                .verticalScroll(rememberScrollState())
         ) {
             Image(
-                painter = painterResource(R.drawable.kotlinico),
+                painter = painterResource(R.drawable.logo),
                 contentDescription = "Icone de l'application",
                 modifier = Modifier
-                    .size(120.dp)
+                    .padding(top = 48.dp, bottom = 1.dp)
+                    .align(Alignment.CenterHorizontally)
+                    .size(200.dp)
                     .animateContentSize() // Animer la taille de l'image
             )
-            Spacer(modifier = Modifier.height(130.dp))
-            Text(
-                text = "Gestion des Tâches",
-                style = MaterialTheme.typography.h4,
-                fontWeight = FontWeight.Light,
-                color = Color.Black,
-                textAlign = TextAlign.Center,
+            Column(
                 modifier = Modifier
-                    .animateContentSize() // Animer la taille du texte
-                    .alpha(animatedTextAlpha.value) // Animer l'opacité du texte
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(
-                text = "Notre application vous aide à organiser votre travail et vos projets, en vous permettant de créer, éditer et suivre vos tâches en un seul endroit. Avec notre interface utilisateur simple et intuitive, vous pouvez facilement visualiser et prioriser votre travail pour rester productif tout au long de la journée.",
-                style = MaterialTheme.typography.body1,
-                fontWeight = FontWeight.Light,
-                color = Color.Black,
-                textAlign = TextAlign.Center,
-                modifier = Modifier
-                    .padding(horizontal = 32.dp)
-                    .alpha(animatedTextAlpha.value) // Animer l'opacité du texte
-            )
-            Spacer(modifier = Modifier.height(32.dp))
-            Button(
-                onClick = onNext,
-                modifier = Modifier
-                    .align(Alignment.End)
-                    .scale(animatedButtonSize.value) // Animer la taille du bouton
+                    .fillMaxSize()
+                    .padding(35.dp)
             ) {
                 Text(
-                    text = "Suivant",
-                    style = MaterialTheme.typography.button,
-                    color = Color.White
+                    text = "Gestion des Tâches",
+                    style = MaterialTheme.typography.h4.copy(fontWeight = FontWeight.Bold),
+                    color = Color.Black,
+                    fontWeight = FontWeight.Light,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier
+                        .padding(bottom = 16.dp)
+                        .alpha(animatedTextAlpha.value) // Animer l'opacité du texte
                 )
+                Text(
+                    text = "Notre application vous aide à organiser votre travail et vos projets, en vous permettant de créer, éditer et suivre vos tâches en un seul endroit. Avec notre interface utilisateur simple et intuitive, vous pouvez facilement visualiser et prioriser votre travail pour rester productif tout au long de la journée.",
+                    style = MaterialTheme.typography.body1,
+                    color = Color.Black,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier
+                        .padding(horizontal = 32.dp)
+                        .alpha(animatedTextAlpha.value) // Animer l'opacité du texte
+                )
+                Spacer(modifier = Modifier.height(32.dp))
+                Button(
+                    onClick = onNext,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .scale(animatedButtonSize.value) // Animer la taille du bouton
+                        .padding(horizontal = 32.dp, vertical = 16.dp)
+                ) {
+                    Text(
+                        text = "Suivant",
+                        style = MaterialTheme.typography.button,
+                        color = Color.White
+                    )
+                }
             }
         }
     }
@@ -203,13 +213,14 @@ fun PresentationFinished(onMenuRoute: () -> Unit) {
         contentAlignment = Alignment.Center
     ) {
         if (visible) {
-            Column(
+            LazyColumn(
                 modifier = Modifier.alpha(animateFloatAsState(targetValue = 1f).value),
                 verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally,
-                content = {
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                item {
                     Text(
-                        text = "Présentation terminée",
+                        text = "Terminer",
                         fontSize = 32.sp,
                         fontWeight = FontWeight.Light,
                         textAlign = TextAlign.Center,
@@ -217,6 +228,18 @@ fun PresentationFinished(onMenuRoute: () -> Unit) {
                         modifier = Modifier.padding(horizontal = 32.dp, vertical = 16.dp)
                     )
                     Spacer(modifier = Modifier.height(32.dp))
+                }
+                item {
+                    Image(
+                        painter = painterResource(id = R.drawable.bureaux),
+                        contentDescription = null,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(300.dp)
+                            .padding(16.dp)
+                    )
+                }
+                item {
                     Button(
                         onClick = {
                             // Stocker la valeur true pour hasCompletedWelcome dans les préférences partagées
@@ -224,16 +247,65 @@ fun PresentationFinished(onMenuRoute: () -> Unit) {
                             onMenuRoute()
                         },
                         modifier = Modifier
-                            .align(Alignment.End)
+                            .fillMaxWidth()
+                            .padding(16.dp)
                     ) {
                         Text(
-                            text = "Commmencer",
+                            text = "Commencer",
                             style = MaterialTheme.typography.button,
                             color = Color.White
                         )
                     }
                 }
+            }
+        }
+    }
+}
+
+@Composable
+fun LogoScreen() {
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = Modifier.fillMaxSize()
+    ) {
+        var logoVisible by remember { mutableStateOf(false) }
+
+        // Animation d'apparition
+        LaunchedEffect(Unit) {
+            logoVisible = true
+        }
+
+        // Animation de déplacement vers le centre
+        val translateY = animateFloatAsState(
+            if (logoVisible) 0f else (-200).dp.value,
+            animationSpec = TweenSpec(durationMillis = 500, easing = FastOutSlowInEasing)
+        ).value
+        val modifier = Modifier.offset(y = translateY.dp)
+
+        // Animation de zoom
+        val scale = animateFloatAsState(
+            if (logoVisible) 1f else 0.5f,
+            animationSpec = TweenSpec(durationMillis = 500, easing = FastOutSlowInEasing)
+        ).value
+        val size = animateDpAsState(
+            if (logoVisible) 200.dp else 100.dp,
+            animationSpec = TweenSpec(durationMillis = 500, easing = FastOutSlowInEasing)
+        ).value
+        val scaleModifier = Modifier
+            .size(size)
+            .scale(scale)
+
+        if (logoVisible) {
+            Image(
+                painter = painterResource(R.drawable.logo),
+                contentDescription = "Logo",
+                modifier = modifier.then(scaleModifier)
             )
+        }
+
+        // Déclenche la redirection vers une autre page après 4 secondes
+        LaunchedEffect(Unit) {
+            delay(5000)
         }
     }
 }
