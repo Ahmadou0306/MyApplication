@@ -60,7 +60,7 @@ fun CalendarModal(showDialog: MutableState<Boolean>){
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Text(
-                                text = "Calendar",
+                                text = "Calendrier",
                                 fontSize = 18.sp,
                                 fontWeight = FontWeight.Bold
                             )
