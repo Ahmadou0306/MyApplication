@@ -1,6 +1,5 @@
 package com.example.myapplication.projetmobile.ui.home.componant
 
-import android.annotation.SuppressLint
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
@@ -25,16 +24,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.myapplication.projetmobile.dataSource.models.Notification
 import com.example.myapplication.projetmobile.dataSource.models.Project
-import com.example.myapplication.projetmobile.ui.componant.EmptyContent
 import com.example.myapplication.projetmobile.ui.componant.EmptyContentCalendar
 import com.example.myapplication.projetmobile.viewsmodels.ProjectViewModel
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
-
-@SuppressLint("NewApi")
-
 
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -43,7 +37,7 @@ import java.time.format.DateTimeFormatter
     val startDate = remember { mutableStateOf(datess[0]) }
     val selectedDate = remember { mutableStateOf(startDate.value) }
 
-    Column(modifier = modifier.padding(16.dp)) {
+    Column(modifier = modifier.padding(15.dp)) {
         Row(
             horizontalArrangement = Arrangement.End,
             verticalAlignment = Alignment.CenterVertically
@@ -175,7 +169,7 @@ fun selectedDate(showDialog: MutableState<Boolean>, value: LocalDate){
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(16.dp),
+                                .padding(15.dp),
                             horizontalArrangement = Arrangement.SpaceBetween,
                             verticalAlignment = Alignment.CenterVertically
                         ) {
@@ -202,8 +196,6 @@ fun selectedDate(showDialog: MutableState<Boolean>, value: LocalDate){
         )
     }
 }
-
-
 @Composable
 fun CalendarModal(showDialog: MutableState<Boolean>){
     val viewModel = viewModel(ProjectViewModel::class.java)
@@ -261,8 +253,6 @@ fun CalendarModal(showDialog: MutableState<Boolean>){
         )
     }
 }
-
-
 @Composable
 fun projectCalendar(project: Project) {
     Card(
