@@ -1,8 +1,6 @@
 package com.example.myapplication.projetmobile.ui.home.componant
 
 import android.annotation.SuppressLint
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -25,7 +23,6 @@ import java.time.format.DateTimeFormatter
 val daysOfWeek = listOf("Dim", "Lun", "Mar", "Mer", "Jeu", "Ven", "Sam")
 val months = listOf("Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre")
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable fun Calendar(
     startDateStr: String,
     endDateStr: String,
