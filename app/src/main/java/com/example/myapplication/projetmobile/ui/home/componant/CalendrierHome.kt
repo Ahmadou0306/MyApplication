@@ -170,7 +170,8 @@ fun CalendarModal(showDialog: MutableState<Boolean>){
         for (weekOfMonth in 1..6) {
             Row (modifier = Modifier.fillMaxWidth()) {
                 for (dayOfWeek in 1..7) {
-                    val dayOfMonth = (weekOfMonth - 1) * 7 + dayOfWeek - firstDayOfMonth.dayOfWeek.value + 1
+
+                    val dayOfMonth = (weekOfMonth - 1) * 7 + dayOfWeek - firstDayOfMonth.dayOfWeek.value
                     if (dayOfMonth < 1 || dayOfMonth > daysInMonth) {
                         Spacer(modifier = Modifier.weight(1f))
                     } else {
