@@ -117,27 +117,6 @@ import androidx.lifecycle.ViewModel
             }
             Spacer(modifier = Modifier.height(8.dp))
 
-                //Seconde ligne Accueil
-                IconButton(
-                    modifier = Modifier.fillMaxWidth().padding(bottom = 25.dp),
-                    onClick = {
-                        println("Clicked")
-                    }
-                ) {
-                    Row() {
-                        //icone
-                        Icon(Icons.Filled.Search, "contentDescription", tint = Color.Blue)
-                        Spacer(modifier = Modifier.width(3.dp))
-                        Text(
-                            text = "Recherche", color = Color.Blue,
-                            style = TextStyle(
-                                fontWeight = FontWeight.Bold,
-                                fontSize = 20.sp
-                            )
-                        )
-                    }
-                }
-            Spacer(modifier = Modifier.height(8.dp))
             //Troisieme ligne Accueil
                     IconButton(
                         modifier = Modifier.fillMaxWidth().padding(bottom = 25.dp),
