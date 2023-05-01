@@ -269,9 +269,9 @@ fun projectCalendar(project: Project) {
             modifier = Modifier.padding(16.dp)
         ) {
             Icon(
-                imageVector = Icons.Default.LocationOn,
+                imageVector = Icons.Default.DateRange,
                 contentDescription = "",
-                tint = MaterialTheme.colors.secondary,
+                tint =Color(com.example.myapplication.projetmobile.ui.detailsProject.colorPersonnel),
                 modifier = Modifier.size(48.dp)
             )
             Spacer(modifier = Modifier.width(16.dp))
