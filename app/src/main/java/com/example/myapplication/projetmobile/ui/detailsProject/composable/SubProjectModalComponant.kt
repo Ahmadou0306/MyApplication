@@ -176,7 +176,7 @@ fun SubProjectModal(showDialog: MutableState<Boolean>,idProject:Int){
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Text(
-                                text = "List  SubProjects",
+                                text = "Liste des Sous-Projets",
                                 fontSize = 18.sp,
                                 fontWeight = FontWeight.Bold
                             )

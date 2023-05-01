@@ -1,28 +1,9 @@
 package com.example.myapplication.projetmobile.ui.detailsProject.composable
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CutCornerShape
-import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
-import androidx.compose.material.TextButton
-import androidx.compose.material.TextField
-import androidx.compose.material.TextFieldDefaults
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.runtime.Composable
@@ -34,16 +15,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.myapplication.projetmobile.dataSource.models.Member
 import com.example.myapplication.projetmobile.ui.componant.addError
-import com.example.myapplication.projetmobile.ui.detailsProject.colorPersonnel
 import com.example.myapplication.projetmobile.viewsmodels.MemberViewModel
 
 @Composable
@@ -69,7 +46,7 @@ fun AddMemberModal(  showDialog:MutableState<Boolean>,selectedId:Int){
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Text(
-                                text = "Form Member",
+                                text = "Formulaire d'ajout d'un membre",
                                 fontSize = 18.sp,
                                 fontWeight = FontWeight.Bold
                             )
@@ -96,7 +73,7 @@ fun AddMemberModal(  showDialog:MutableState<Boolean>,selectedId:Int){
 @Composable
 fun addMemberDiaolog(showDialog:MutableState<Boolean>,selectedId:Int){
     val viewModel = viewModel(MemberViewModel::class.java)
-    var showDialog = remember { mutableStateOf(false) }
+    val showDialog = remember { mutableStateOf(false) }
     val id = remember { mutableStateOf(0) }
     val idProject = remember { mutableStateOf(selectedId) }
     val name = remember { mutableStateOf("") }
@@ -131,47 +108,47 @@ fun addMemberDiaolog(showDialog:MutableState<Boolean>,selectedId:Int){
             .padding(horizontal = 20.dp)
     ) {
 
-        Spacer(modifier = Modifier.padding(vertical=8.dp))
-        OutlinedTextField(
-            value = id.value.toString(),
-            modifier = Modifier.fillMaxWidth(),
-            shape= CutCornerShape(topStart = 15.dp, bottomEnd = 15.dp),
-            onValueChange = { newValue ->
-                id.value = newValue.toIntOrNull()?:0
-            },
-            label = { Text(text = " id", color = Color(color = 0xFF1E88E5)) },
-            textStyle = TextStyle(
-                fontSize = 16.sp
-            ),
-            colors = TextFieldDefaults.outlinedTextFieldColors(
-                textColor = MaterialTheme.colors.onSurface,
-                focusedBorderColor = Color(color = 0xFF1E88E5),
-                cursorColor = MaterialTheme.colors.onSurface,
-            ),
-            enabled = false
-        )
-
-        Spacer(modifier = Modifier.padding(vertical=8.dp))
-        OutlinedTextField(
-            value = idProject.value.toString(),
-            modifier = Modifier.fillMaxWidth(),
-            shape= CutCornerShape(topStart = 15.dp, bottomEnd = 15.dp),
-            onValueChange = { newValue ->
-                idProject.value = newValue.toIntOrNull()?:0
-            },
-            label = { Text(text = " id Project", color = Color(color = 0xFF1E88E5)) },
-            textStyle = TextStyle(
-                fontSize = 16.sp
-            ),
-            colors = TextFieldDefaults.outlinedTextFieldColors(
-                textColor = MaterialTheme.colors.onSurface,
-                focusedBorderColor = Color(color = 0xFF1E88E5),
-                cursorColor = MaterialTheme.colors.onSurface,
-            ),
-            enabled = false
-        )
-
-        Spacer(modifier = Modifier.padding(vertical=8.dp))
+//        Spacer(modifier = Modifier.padding(vertical=8.dp))
+//        OutlinedTextField(
+//            value = id.value.toString(),
+//            modifier = Modifier.fillMaxWidth(),
+//            shape= CutCornerShape(topStart = 15.dp, bottomEnd = 15.dp),
+//            onValueChange = { newValue ->
+//                id.value = newValue.toIntOrNull()?:0
+//            },
+//            label = { Text(text = " id", color = Color(color = 0xFF1E88E5)) },
+//            textStyle = TextStyle(
+//                fontSize = 16.sp
+//            ),
+//            colors = TextFieldDefaults.outlinedTextFieldColors(
+//                textColor = MaterialTheme.colors.onSurface,
+//                focusedBorderColor = Color(color = 0xFF1E88E5),
+//                cursorColor = MaterialTheme.colors.onSurface,
+//            ),
+//            enabled = false
+//        )
+//
+//        Spacer(modifier = Modifier.padding(vertical=8.dp))
+//        OutlinedTextField(
+//            value = idProject.value.toString(),
+//            modifier = Modifier.fillMaxWidth(),
+//            shape= CutCornerShape(topStart = 15.dp, bottomEnd = 15.dp),
+//            onValueChange = { newValue ->
+//                idProject.value = newValue.toIntOrNull()?:0
+//            },
+//            label = { Text(text = " id Project", color = Color(color = 0xFF1E88E5)) },
+//            textStyle = TextStyle(
+//                fontSize = 16.sp
+//            ),
+//            colors = TextFieldDefaults.outlinedTextFieldColors(
+//                textColor = MaterialTheme.colors.onSurface,
+//                focusedBorderColor = Color(color = 0xFF1E88E5),
+//                cursorColor = MaterialTheme.colors.onSurface,
+//            ),
+//            enabled = false
+//        )
+//
+//        Spacer(modifier = Modifier.padding(vertical=8.dp))
         OutlinedTextField(
             value = name.value,
             modifier = Modifier.fillMaxWidth(),

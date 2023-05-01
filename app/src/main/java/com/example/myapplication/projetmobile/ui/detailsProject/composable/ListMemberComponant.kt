@@ -178,7 +178,7 @@ fun ListMemberModal(showDialog: MutableState<Boolean>,idProject:Int) {
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Text(
-                                text = "List members",
+                                text = "Liste des membres",
                                 fontSize = 18.sp,
                                 fontWeight = FontWeight.Bold
                             )

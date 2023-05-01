@@ -88,12 +88,12 @@ private const val colorPersonnel=0xFF1E88E5
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Text(
-                        text = "Deadline : ${project.dueDate}",
+                        text = "Date Limite : ${project.dueDate}",
                         style = MaterialTheme.typography.caption,
                         color = MaterialTheme.colors.onSurface
                     )
                     Text(
-                        text = "Status : ${stateProject(project)}",
+                        text = "Statut : ${stateProject(project)}",
                         style = MaterialTheme.typography.caption,
                         color = MaterialTheme.colors.onSurface
                     )
@@ -108,7 +108,7 @@ private const val colorPersonnel=0xFF1E88E5
                         contentPadding = PaddingValues(10.dp)
                     )
                     {
-                        Text(text = "More", color = Color(color = 0xFFFFFFFF))
+                        Text(text = "Plus", color = Color(color = 0xFFFFFFFF))
 
                     }
                 }
@@ -129,5 +129,5 @@ fun stateProject(project: Project): String {
     val outputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
     val today = LocalDate.now().format(outputFormatter)
     val projectDate = LocalDate.parse(project.dueDateFin, inputFormatter)
-    return  if (projectDate.format(outputFormatter) == today) " Terminer" else "En cour"
+    return  if (projectDate.format(outputFormatter) == today) " Terminer" else "En cours"
 }

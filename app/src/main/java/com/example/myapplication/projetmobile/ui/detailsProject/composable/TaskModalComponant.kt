@@ -350,7 +350,7 @@ fun TaskModal(showDialog: MutableState<Boolean>,idProject:Int){
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Text(
-                                text = "List Tasks",
+                                text = "Liste des Taches",
                                 fontSize = 18.sp,
                                 fontWeight = FontWeight.Bold
                             )

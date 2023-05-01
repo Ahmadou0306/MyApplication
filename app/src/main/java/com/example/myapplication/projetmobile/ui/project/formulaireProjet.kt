@@ -27,7 +27,6 @@ import com.example.myapplication.projetmobile.dataSource.models.Project
 import com.example.myapplication.projetmobile.ui.componant.addError
 import com.example.myapplication.projetmobile.ui.home.componant.BottomBar
 import com.example.myapplication.projetmobile.ui.home.componant.FloatingActionButtonComp
-import com.example.myapplication.projetmobile.ui.home.componant.drawerView
 import com.example.myapplication.projetmobile.viewsmodels.ProjectViewModel
 import kotlinx.coroutines.delay
 import java.util.*
@@ -73,11 +72,11 @@ fun ScaffoldContain(onFormNavigate: () -> Unit){
     month = calendar.get(Calendar.MONTH)
     day = calendar.get(Calendar.DAY_OF_MONTH)
     calendar.time = Date()
-    var showDialog = remember { mutableStateOf(false) }
+    val showDialog = remember { mutableStateOf(false) }
     var formClickedScaffold by remember { mutableStateOf(false) }
-    var description = remember { mutableStateOf(TextFieldValue()) }
-    var name = remember { mutableStateOf(TextFieldValue()) }
-    var chefName = remember { mutableStateOf(TextFieldValue()) }
+    val description = remember { mutableStateOf(TextFieldValue()) }
+    val name = remember { mutableStateOf(TextFieldValue()) }
+    val chefName = remember { mutableStateOf(TextFieldValue()) }
     val dateStart = remember { mutableStateOf("") }
     val dateEnd = remember { mutableStateOf("") }
 

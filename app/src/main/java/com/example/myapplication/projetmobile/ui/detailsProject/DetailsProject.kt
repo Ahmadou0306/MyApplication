@@ -102,10 +102,10 @@ fun ActionIcons(selectedId: Int) {
     var showDialogTask = remember { mutableStateOf(false) }
     var showDiagram = remember { mutableStateOf(false) }
     val buttonData = listOf(
-        ActionButtonData(Icons.Default.Create, "Add Sous-projet") {showDialogSubProject.value=true},
-        ActionButtonData(Icons.Default.Add, "Add tâche") {showDialogTask.value=true},
+        ActionButtonData(Icons.Default.Create, "Ajouter Sous-projet") {showDialogSubProject.value=true},
+        ActionButtonData(Icons.Default.Add, "Ajouter tâche") {showDialogTask.value=true},
         ActionButtonData(Icons.Default.Person, "Ajouter Un Membre") { showDialogMember.value = true },
-        ActionButtonData(Icons.Default.Info, "Diagram") { showDiagram.value=true }
+        ActionButtonData(Icons.Default.Info, "Diagramme") { showDiagram.value=true }
     )
 
     LazyRow(
@@ -216,7 +216,7 @@ fun DetailHome(
                     ) {
                         Button(
                             onClick = { showDialog = true },
-                            modifier = Modifier.fillMaxWidth(),
+                            modifier = Modifier.align(Alignment.Center),
                             colors = ButtonDefaults.buttonColors(backgroundColor = Color(colorPersonnel))
                         ) {
                             Text(text = "Supprimer Le Projet", color = Color.White)
@@ -303,9 +303,9 @@ fun TroisCards(idProject:Int) {
                             Text(when (index) {
                                 0 -> "Membres"
                                 1 -> "Tâches"
-                                2 -> "Sous-project"
+                                2 -> "Sous-projet"
                                 else -> ""
-                            })
+                            }, color = Color.White)
 
                             ListMemberModal(showListDialogMember,idProject)
                             TaskModal(showListDialogTask,idProject)
