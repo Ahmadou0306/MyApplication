@@ -32,6 +32,66 @@ import java.time.format.DateTimeFormatter
 
 
 @RequiresApi(Build.VERSION_CODES.O)
+
+
+@Composable
+fun CalendarModal(showDialog: MutableState<Boolean>){
+    val viewModel = viewModel(ProjectViewModel::class.java)
+    val state by viewModel.state.collectAsState()
+    val datesString= mutableListOf<LocalDate>()
+    val inputFormatter = DateTimeFormatter.ofPattern("yyyy-M-d")
+    val outputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+    // Modal
+    if (showDialog.value) {
+        Dialog(
+            onDismissRequest = { showDialog.value = false },
+            content = {
+                Surface(
+                    modifier = Modifier.fillMaxWidth(),
+                    color = Color.White,
+                    elevation = 8.dp
+                ) {
+                    Column {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(16.dp),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text(
+                                text = "Calendar",
+                                fontSize = 18.sp,
+                                fontWeight = FontWeight.Bold
+                            )
+                            IconButton(
+                                onClick = { showDialog.value = false },
+                                modifier = Modifier.size(48.dp)
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.Close,
+                                    contentDescription = null,
+                                    tint = Color.Black
+                                )
+                            }
+                        }
+                        //Calendar
+                        if(state.projectList.isNotEmpty()){
+                            state.projectList.forEach { project ->
+                                datesString.add( LocalDate.parse(outputFormatter.format(LocalDate.parse(project.dueDate, inputFormatter))))
+                            }
+                            val dateProject = datesString.sorted()
+                            Calendrier(dateProject)
+                        }else{
+                            EmptyContentCalendar()
+                        }
+                        }
+                    }
+                }
+        )
+    }
+}
+
 @Composable fun Calendrier(datess: List<LocalDate>, modifier: Modifier = Modifier) {
     var showDialog = remember { mutableStateOf(false) }
     val startDate = remember { mutableStateOf(datess[0]) }
@@ -193,63 +253,6 @@ fun selectedDate(showDialog: MutableState<Boolean>, value: LocalDate){
                     }
                 }
             }
-        )
-    }
-}
-@Composable
-fun CalendarModal(showDialog: MutableState<Boolean>){
-    val viewModel = viewModel(ProjectViewModel::class.java)
-    val state by viewModel.state.collectAsState()
-    val datesString= mutableListOf<LocalDate>()
-    val inputFormatter = DateTimeFormatter.ofPattern("yyyy-M-d")
-    val outputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-    // Modal
-    if (showDialog.value) {
-        Dialog(
-            onDismissRequest = { showDialog.value = false },
-            content = {
-                Surface(
-                    modifier = Modifier.fillMaxWidth(),
-                    color = Color.White,
-                    elevation = 8.dp
-                ) {
-                    Column {
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(16.dp),
-                            horizontalArrangement = Arrangement.SpaceBetween,
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Text(
-                                text = "Calendar",
-                                fontSize = 18.sp,
-                                fontWeight = FontWeight.Bold
-                            )
-                            IconButton(
-                                onClick = { showDialog.value = false },
-                                modifier = Modifier.size(48.dp)
-                            ) {
-                                Icon(
-                                    imageVector = Icons.Default.Close,
-                                    contentDescription = null,
-                                    tint = Color.Black
-                                )
-                            }
-                        }
-                        //Calendar
-                        if(state.projectList.isNotEmpty()){
-                            state.projectList.forEach { project ->
-                                datesString.add( LocalDate.parse(outputFormatter.format(LocalDate.parse(project.dueDate, inputFormatter))))
-                            }
-                            val dateProject = datesString.sorted()
-                            Calendrier(dateProject)
-                        }else{
-                            EmptyContentCalendar()
-                        }
-                        }
-                    }
-                }
         )
     }
 }
