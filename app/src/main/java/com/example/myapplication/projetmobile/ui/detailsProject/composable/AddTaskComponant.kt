@@ -90,7 +90,7 @@ fun AddTaskModal(showDialog: MutableState<Boolean>, selectedId:Int){
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Text(
-                                text = "Form Task",
+                                text = "Formulaire de tâche",
                                 fontSize = 18.sp,
                                 fontWeight = FontWeight.Bold
                             )
@@ -204,7 +204,7 @@ fun AddTaskForm(showDialog: MutableState<Boolean>, selectedId:Int){
             onValueChange = { newValue ->
                 nameState.value = newValue
             },
-            label = { Text(text = " Name", color = Color(color = 0xFF1E88E5)) },
+            label = { Text(text = "Nom", color = Color(color = 0xFF1E88E5)) },
             textStyle = TextStyle(
                 fontSize = 16.sp
             ),
@@ -249,7 +249,7 @@ fun AddTaskForm(showDialog: MutableState<Boolean>, selectedId:Int){
             onValueChange = {   newValue ->
                 dueDateState.value = newValue
             },
-            label = { Text(text = "Task Start", color = Color(color = 0xFF1E88E5)) },
+            label = { Text(text = "Debut projet", color = Color(color = 0xFF1E88E5)) },
             readOnly = true,
             trailingIcon = {
                 FloatingActionButton(onClick = { datePickerDialog.show() },
@@ -279,7 +279,7 @@ fun AddTaskForm(showDialog: MutableState<Boolean>, selectedId:Int){
             value = finDateState.value,
             modifier = Modifier.fillMaxWidth(),
             onValueChange = {  },
-            label = { Text(text = "Task Deadline", color = Color(color = 0xFF1E88E5)) },
+            label = { Text(text = "Date limite projet", color = Color(color = 0xFF1E88E5)) },
             readOnly = true,
             trailingIcon = {
                 FloatingActionButton(onClick = { datePickerDialog2.show() },

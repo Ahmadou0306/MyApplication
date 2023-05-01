@@ -156,7 +156,7 @@ fun addMemberDiaolog(showDialog:MutableState<Boolean>,selectedId:Int){
             onValueChange = { newValue ->
                 name.value = newValue
             },
-            label = { Text(text = " Name Member", color = Color(color = 0xFF1E88E5)) },
+            label = { Text(text = " Nom Membre", color = Color(color = 0xFF1E88E5)) },
             textStyle = TextStyle(
                 fontSize = 16.sp
             ),

@@ -72,7 +72,7 @@ fun AddSubProjectModal(  showDialog:MutableState<Boolean>,selectedId:Int){
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Text(
-                                text = "Form SubProject",
+                                text = "Formulaire sous projet",
                                 fontSize = 18.sp,
                                 fontWeight = FontWeight.Bold
                             )
@@ -169,7 +169,7 @@ fun SubProjectForm(showDialog:MutableState<Boolean>,selectedId:Int){
             onValueChange = { newValue ->
                 name = newValue
             },
-            label = { Text(text = "Sub-Project Name", color = Color(color = 0xFF1E88E5)) },
+            label = { Text(text = "Nom Sous-projet", color = Color(color = 0xFF1E88E5)) },
             textStyle = TextStyle(
                 fontSize = 16.sp
             ),
@@ -189,7 +189,7 @@ fun SubProjectForm(showDialog:MutableState<Boolean>,selectedId:Int){
                 description = newValue
             },
             shape= CutCornerShape(topStart = 15.dp, bottomEnd = 15.dp),
-            label = { Text(text = "Sub-Project Description", color = Color(color = 0xFF1E88E5)) },
+            label = { Text(text = "Description", color = Color(color = 0xFF1E88E5)) },
             maxLines = 5,
             textStyle = TextStyle(
                 fontSize = 16.sp
@@ -212,7 +212,7 @@ fun SubProjectForm(showDialog:MutableState<Boolean>,selectedId:Int){
             onValueChange = {   newValue ->
                 dateStart.value = newValue
             },
-            label = { Text(text = "Sub-Project Start", color = Color(color = 0xFF1E88E5)) },
+            label = { Text(text = "Debut sous-projet", color = Color(color = 0xFF1E88E5)) },
             readOnly = true,
             trailingIcon = {
                 FloatingActionButton(onClick = { datePickerDialog.show() },
@@ -243,7 +243,7 @@ fun SubProjectForm(showDialog:MutableState<Boolean>,selectedId:Int){
             value = dateEnd.value,
             modifier = Modifier.fillMaxWidth(),
             onValueChange = {  },
-            label = { Text(text = "Sub-Project Deadline", color = Color(color = 0xFF1E88E5)) },
+            label = { Text(text = "Date limite", color = Color(color = 0xFF1E88E5)) },
             readOnly = true,
             trailingIcon = {
                 FloatingActionButton(onClick = { datePickerDialog2.show() },
@@ -275,7 +275,7 @@ fun SubProjectForm(showDialog:MutableState<Boolean>,selectedId:Int){
             contentPadding = PaddingValues(10.dp)
         )
         {
-            Text(text = "Create Project", color = Color(color = 0xFFFFFFFF))
+            Text(text = "Creer", color = Color(color = 0xFFFFFFFF))
 
         }
         Spacer(modifier = Modifier.padding(8.dp))

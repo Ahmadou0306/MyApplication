@@ -17,42 +17,27 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.myapplication.R
 import com.example.myapplication.projetmobile.dataSource.models.Project
 import com.example.myapplication.projetmobile.dataSource.models.Task
-import com.example.myapplication.projetmobile.ui.detailsProject.composable.AddMemberModal
-import com.example.myapplication.projetmobile.ui.detailsProject.composable.AddSubProjectModal
-import com.example.myapplication.projetmobile.ui.detailsProject.composable.AddTaskModal
-import com.example.myapplication.projetmobile.ui.detailsProject.composable.DiagramModal
-import com.example.myapplication.projetmobile.ui.detailsProject.composable.ListMemberModal
-import com.example.myapplication.projetmobile.ui.detailsProject.composable.SubProjectModal
-import com.example.myapplication.projetmobile.ui.detailsProject.composable.TaskModal
+import com.example.myapplication.projetmobile.ui.detailsProject.composable.*
 import com.example.myapplication.projetmobile.ui.home.componant.BottomBar
 import com.example.myapplication.projetmobile.ui.home.componant.FloatingActionButtonComp
 import com.example.myapplication.projetmobile.viewsmodels.ProjectViewModel
 import com.example.myapplication.projetmobile.viewsmodels.TaskViewModel
-import kotlinx.coroutines.launch
 
 const val colorPersonnel=0xFF1E88E5
 
@@ -97,10 +82,10 @@ fun ActionButton(buttonData: ActionButtonData) {
 fun ActionIcons(selectedId: Int) {
 
 
-    var showDialogMember = remember { mutableStateOf(false) }
-    var showDialogSubProject = remember { mutableStateOf(false) }
-    var showDialogTask = remember { mutableStateOf(false) }
-    var showDiagram = remember { mutableStateOf(false) }
+    val showDialogMember = remember { mutableStateOf(false) }
+    val showDialogSubProject = remember { mutableStateOf(false) }
+    val showDialogTask = remember { mutableStateOf(false) }
+    val showDiagram = remember { mutableStateOf(false) }
     val buttonData = listOf(
         ActionButtonData(Icons.Default.Create, "Ajouter Sous-projet") {showDialogSubProject.value=true},
         ActionButtonData(Icons.Default.Add, "Ajouter tâche") {showDialogTask.value=true},
@@ -243,9 +228,9 @@ fun DetailHome(
 
 @Composable
 fun TroisCards(idProject:Int) {
-    var showListDialogMember = remember { mutableStateOf(false) }
-    var showListDialogTask = remember { mutableStateOf(false) }
-    var showListDialogSubProject = remember { mutableStateOf(false) }
+    val showListDialogMember = remember { mutableStateOf(false) }
+    val showListDialogTask = remember { mutableStateOf(false) }
+    val showListDialogSubProject = remember { mutableStateOf(false) }
 
     val cardPadding = 16.dp
     val cards = listOf(
@@ -321,7 +306,7 @@ fun TroisCards(idProject:Int) {
 @Composable
 fun Header(id:Int){
     val viewModelMember = viewModel(ProjectViewModel::class.java)
-    var projectStateName = remember { mutableStateOf<Project?>(null) }
+    val projectStateName = remember { mutableStateOf<Project?>(null) }
 
     LaunchedEffect(key1 = id) {
         viewModelMember.getProjectById(id).collect { project ->

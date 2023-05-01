@@ -3,29 +3,14 @@ package com.example.myapplication.projetmobile.ui.detailsProject.composable
 import android.graphics.Paint
 import android.graphics.Typeface
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -41,10 +26,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.myapplication.projetmobile.dataSource.models.Task
-import com.example.myapplication.projetmobile.viewsmodels.MemberViewModel
 import com.example.myapplication.projetmobile.viewsmodels.TaskViewModel
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.first
 
 
 @Composable
@@ -71,7 +53,7 @@ fun TasksChart(id:Int) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .height(300.dp)
+            .height(450.dp)
             .padding(25.dp)
     ) {
         Canvas(modifier = Modifier.fillMaxSize()) {
@@ -80,7 +62,7 @@ fun TasksChart(id:Int) {
             val radius = size.minDimension / 2f - 32.dp.toPx()
 
             drawArc(
-                color = Color(0xFFE5E5E5),
+                color = Color(0xFFFFD3D3),
                 startAngle = 0f,
                 sweepAngle = 360f,
                 useCenter = true,
@@ -90,7 +72,7 @@ fun TasksChart(id:Int) {
             )
 
             drawArc(
-                color = Color(0xFF61D8B9),
+                color = Color(0xFF00FF48),
                 startAngle = -90f,
                 sweepAngle = completedTasksPercentage * 360f / 100f,
                 useCenter = true,
@@ -123,7 +105,7 @@ fun TasksChart(id:Int) {
                 )
             }
         }
-        Spacer(modifier = Modifier.height(20.dp))
+        Spacer(modifier = Modifier.height(2.dp))
 
         Column(
             modifier = Modifier
@@ -212,7 +194,7 @@ fun DiagramModal(showDialog: MutableState<Boolean>,selectedId:Int){
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Text(
-                                text = "Diagram Evolution",
+                                text = "Evolution des tâches",
                                 fontSize = 18.sp,
                                 fontWeight = FontWeight.Bold
                             )
@@ -229,7 +211,6 @@ fun DiagramModal(showDialog: MutableState<Boolean>,selectedId:Int){
                         }
                         //DIAGRAM
                         TasksChart(id = selectedId)
-
                     }
                 }
             }
