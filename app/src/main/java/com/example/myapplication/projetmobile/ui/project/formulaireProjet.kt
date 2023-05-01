@@ -151,7 +151,7 @@ fun ScaffoldContain(onFormNavigate: () -> Unit){
             onValueChange = {
                 name.value = it
             },
-            label = { Text(text = "Project Name", color = Color(color = 0xFF1E88E5)) },
+            label = { Text(text = "Nom du projet", color = Color(color = 0xFF1E88E5)) },
             textStyle = TextStyle(
                 fontSize = 16.sp
             ),
@@ -170,7 +170,7 @@ fun ScaffoldContain(onFormNavigate: () -> Unit){
             onValueChange = {
                 chefName.value = it
             },
-            label = { Text(text = "Project Manager", color = Color(color = 0xFF1E88E5)) },
+            label = { Text(text = "Chef de projet", color = Color(color = 0xFF1E88E5)) },
             textStyle = TextStyle(
                 fontSize = 16.sp
             ),
@@ -189,7 +189,7 @@ fun ScaffoldContain(onFormNavigate: () -> Unit){
                 description.value=it
             },
             shape= CutCornerShape(topStart = 15.dp, bottomEnd = 15.dp),
-            label = { Text(text = "Project Description", color = Color(color = 0xFF1E88E5)) },
+            label = { Text(text = "Description du projet", color = Color(color = 0xFF1E88E5)) },
             maxLines = 5,
             textStyle = TextStyle(
                 fontSize = 16.sp
@@ -212,7 +212,7 @@ fun ScaffoldContain(onFormNavigate: () -> Unit){
             onValueChange = {
                 dateStart.value = it
             },
-            label = { Text(text = "Project Start", color = Color(color = 0xFF1E88E5)) },
+            label = { Text(text = "Debut Projet", color = Color(color = 0xFF1E88E5)) },
             readOnly = true,
             trailingIcon = {
                 FloatingActionButton(onClick = { datePickerDialog.show() },
@@ -241,7 +241,7 @@ fun ScaffoldContain(onFormNavigate: () -> Unit){
             value = dateEnd.value,
             modifier = Modifier.fillMaxWidth(),
             onValueChange = { dateEnd.value = it },
-            label = { Text(text = "Project Deadline", color = Color(color = 0xFF1E88E5)) },
+            label = { Text(text = "Date limite du projet", color = Color(color = 0xFF1E88E5)) },
             readOnly = true,
             trailingIcon = {
                 FloatingActionButton(onClick = { datePickerDialog2.show() },
@@ -279,7 +279,7 @@ fun ScaffoldContain(onFormNavigate: () -> Unit){
             contentPadding = PaddingValues(16.dp)
         )
         {
-            Text(text = "Create Project", color = Color(color = 0xFFFFFFFF))
+            Text(text = "Créer un projet", color = Color(color = 0xFFFFFFFF))
         }
         if(formClickedScaffold){
             afficheMessageValidation()
