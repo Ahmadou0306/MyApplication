@@ -1,10 +1,8 @@
 package com.example.myapplication.projetmobile.ui.detailsProject.composable
 
-import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.widget.DatePicker
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -14,13 +12,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CutCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.DropdownMenu
-import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
@@ -32,11 +27,8 @@ import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.DateRange
-import androidx.compose.material.icons.filled.KeyboardArrowDown
-import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -44,27 +36,19 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.toSize
-import androidx.compose.ui.window.Dialog
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.myapplication.projetmobile.dataSource.models.Member
-import com.example.myapplication.projetmobile.dataSource.models.Task
-import com.example.myapplication.projetmobile.viewsmodels.MemberViewModel
-import com.example.myapplication.projetmobile.viewsmodels.TaskViewModel
-import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.lifecycleScope
+import androidx.compose.ui.window.Dialog
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.myapplication.projetmobile.dataSource.models.Task
 import com.example.myapplication.projetmobile.ui.componant.addError
-import kotlinx.coroutines.launch
+import com.example.myapplication.projetmobile.viewsmodels.MemberViewModel
+import com.example.myapplication.projetmobile.viewsmodels.TaskViewModel
 import java.util.Calendar
 import java.util.Date
 
@@ -204,7 +188,7 @@ fun AddTaskForm(showDialog: MutableState<Boolean>, selectedId:Int){
             onValueChange = { newValue ->
                 nameState.value = newValue
             },
-            label = { Text(text = "Nom", color = Color(color = 0xFF1E88E5)) },
+            label = { Text(text = "Nom de la tâche", color = Color(color = 0xFF1E88E5)) },
             textStyle = TextStyle(
                 fontSize = 16.sp
             ),
@@ -249,7 +233,7 @@ fun AddTaskForm(showDialog: MutableState<Boolean>, selectedId:Int){
             onValueChange = {   newValue ->
                 dueDateState.value = newValue
             },
-            label = { Text(text = "Debut projet", color = Color(color = 0xFF1E88E5)) },
+            label = { Text(text = "Date debut tâche", color = Color(color = 0xFF1E88E5)) },
             readOnly = true,
             trailingIcon = {
                 FloatingActionButton(onClick = { datePickerDialog.show() },
@@ -279,7 +263,7 @@ fun AddTaskForm(showDialog: MutableState<Boolean>, selectedId:Int){
             value = finDateState.value,
             modifier = Modifier.fillMaxWidth(),
             onValueChange = {  },
-            label = { Text(text = "Date limite projet", color = Color(color = 0xFF1E88E5)) },
+            label = { Text(text = "Date limite tâche", color = Color(color = 0xFF1E88E5)) },
             readOnly = true,
             trailingIcon = {
                 FloatingActionButton(onClick = { datePickerDialog2.show() },
