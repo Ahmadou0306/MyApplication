@@ -233,7 +233,7 @@ fun AddTaskForm(showDialog: MutableState<Boolean>, selectedId:Int){
             onValueChange = {   newValue ->
                 dueDateState.value = newValue
             },
-            label = { Text(text = "Date debut tâche", color = Color(color = 0xFF1E88E5)) },
+            label = { Text(text = "Date debut", color = Color(color = 0xFF1E88E5)) },
             readOnly = true,
             trailingIcon = {
                 FloatingActionButton(onClick = { datePickerDialog.show() },
@@ -263,7 +263,7 @@ fun AddTaskForm(showDialog: MutableState<Boolean>, selectedId:Int){
             value = finDateState.value,
             modifier = Modifier.fillMaxWidth(),
             onValueChange = {  },
-            label = { Text(text = "Date limite tâche", color = Color(color = 0xFF1E88E5)) },
+            label = { Text(text = "Date limite", color = Color(color = 0xFF1E88E5)) },
             readOnly = true,
             trailingIcon = {
                 FloatingActionButton(onClick = { datePickerDialog2.show() },
