@@ -10,9 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Text
@@ -32,61 +30,16 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.myapplication.projetmobile.dataSource.models.Member
+import com.example.myapplication.projetmobile.dataSource.models.TaskToMember
 import com.example.myapplication.projetmobile.ui.detailsProject.colorPersonnel
 import com.example.myapplication.projetmobile.viewsmodels.MemberViewModel
+import com.example.myapplication.projetmobile.viewsmodels.TaskToMemberViewModel
 import kotlinx.coroutines.flow.Flow
 
 
 @Composable
-fun MembersList(members: Flow<List<Member>>) {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(Color.White)
-            .padding(16.dp)
-            ,
-
-
-    ) {
-       Box(
-           modifier = Modifier
-               .background(Color(colorPersonnel))
-               .shadow(
-                   elevation = 1.dp,
-                   shape = RoundedCornerShape(1.dp),
-                   clip = false
-               )
-               .padding(vertical = 3.dp)
-               .fillMaxWidth()
-       ) {
-           Text(
-               text = "Membres du projet",
-               fontSize = 20.sp,
-               fontWeight = FontWeight.Bold,
-               modifier = Modifier
-                   .fillMaxWidth()
-               ,
-               textAlign = TextAlign.Center,
-               color = Color.White,
-           )
-       }
-        Spacer(modifier = Modifier.padding(vertical = 10.dp))
-
-        listMember()
-    }
-}
-@Composable
-fun listMember(){
-    val viewModel = viewModel(MemberViewModel::class.java)
-    val state by viewModel.state.collectAsState()
-    LazyColumn {
-        items(state.memberList) { member ->
-            memberCard(member)
-        }
-    }
-}
-@Composable
-fun memberCard(member: Member) {
+fun memberCard(member: Member, memberToTask: TaskToMember) {
+    val viewModel = viewModel(TaskToMemberViewModel::class.java)
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier.padding(bottom = 8.dp)
@@ -106,7 +59,7 @@ fun memberCard(member: Member) {
         )
         Spacer(modifier = Modifier.weight(1f))
         IconButton(
-            onClick = {},
+            onClick = {viewModel.delete(memberToTask) },
             modifier = Modifier.size(24.dp)
         ) {
             Icon(

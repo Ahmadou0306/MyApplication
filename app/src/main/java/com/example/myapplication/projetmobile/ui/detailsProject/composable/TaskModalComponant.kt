@@ -206,7 +206,6 @@ fun updateState():Task= Task(
                 )
                 IconButton(
                     onClick = {
-                              /* TODO: handle delete action */
                               showDialogConfirmation=true
                               },
                     modifier = Modifier.size(24.dp)
@@ -481,7 +480,7 @@ fun listTasksToMember(isExpanded: Boolean, task: Task) {
                if(memberToTask.idTask==task.id){
                    val memberState by viewModelMember.getMemberById(memberToTask.idMember)
                        .collectAsState(initial = null)
-                   memberState?.let { memberCard(it) }
+                   memberState?.let { memberCard(it,memberToTask) }
                }
             }
         }

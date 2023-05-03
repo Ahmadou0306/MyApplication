@@ -262,11 +262,12 @@ fun projectCalendar(project: Project) {
     Card(
         modifier = Modifier.padding(16.dp),
         elevation = 4.dp,
-        shape = RoundedCornerShape(8.dp)
+        shape = RoundedCornerShape(8.dp),
+
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.padding(16.dp)
+            modifier = Modifier.padding(16.dp),
         ) {
             Icon(
                 imageVector = Icons.Default.DateRange,

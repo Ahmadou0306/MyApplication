@@ -90,7 +90,7 @@ fun ActionIcons(selectedId: Int) {
         ActionButtonData(Icons.Default.Create, "Ajouter Sous-projet") {showDialogSubProject.value=true},
         ActionButtonData(Icons.Default.Add, "Ajouter tâche") {showDialogTask.value=true},
         ActionButtonData(Icons.Default.Person, "Ajouter Un Membre") { showDialogMember.value = true },
-        ActionButtonData(Icons.Default.Info, "Diagramme") { showDiagram.value=true }
+        ActionButtonData(Icons.Default.Settings, "Diagramme") { showDiagram.value=true }
     )
 
     LazyRow(
@@ -202,6 +202,7 @@ fun DetailHome(
                         Button(
                             onClick = { showDialog = true },
                             modifier = Modifier.align(Alignment.Center),
+                            shape= CutCornerShape(topStart = 7.dp, bottomEnd = 7.dp),
                             colors = ButtonDefaults.buttonColors(backgroundColor = Color(colorPersonnel))
                         ) {
                             Text(text = "Supprimer Le Projet", color = Color.White)
